@@ -10,11 +10,13 @@ import (
 
 type ProductEntity struct {
 	Title               string
+	ImagePath           string
 	Manufacture         string
 	DistributionChannel string
 	DistributionUrl     string
-	Price               float64
+	Price               string
 	Servings            int
+	Category            string
 }
 
 func AddProduct(writeDb *mongo.Collection, product ProductEntity) (*mongo.InsertOneResult, error) {

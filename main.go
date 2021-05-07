@@ -1,30 +1,21 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"sync"
 
-	"lessbutter.co/mealkit/product"
-	"lessbutter.co/mealkit/storage"
+	"lessbutter.co/mealkit/crawler"
 )
 
-func init() {
-	fmt.Println("Initialization..")
-}
-
 func main() {
-	fmt.Println("Main function Start")
-	conn, _ := storage.MongoConn()
-	mongo := conn.Database("mealkit").Collection("products")
+	log.Println("Main function Start")
+	var wg sync.WaitGroup
 
-	sample_product := product.ProductEntity{
-		Title:               "seokmin",
-		Manufacture:         "LessButter co.",
-		DistributionChannel: "Softbank",
-		DistributionUrl:     "https://lessbutter.co",
-		Price:               100000000,
-		Servings:            3,
+	var pages = []string{"1", "2"}
+	for _, pageNum := range pages {
+		wg.Add(1)
+		go crawler.CrawlFreshEasy(&wg, pageNum)
 	}
-	ret, _ := product.AddProduct(mongo, sample_product)
-	fmt.Printf("------------ID: %v is uploaded------------", ret.InsertedID)
-	fmt.Println("Main function End")
+	wg.Wait()
+	log.Println("Main function End")
 }
