@@ -3,6 +3,7 @@ package domains
 import (
 	"context"
 	"log"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -39,9 +40,11 @@ type NaverProductEntity struct {
 }
 
 func AddProduct(product ProductEntity) (*mongo.InsertOneResult, error) {
-	conn, _, _ := external.MongoConn()
+	conn := external.MongoConn()
 	productsCollection := conn.Database("mealkit").Collection("products")
-	addProductResult, err := productsCollection.InsertOne(context.TODO(), bson.D{
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	addProductResult, err := productsCollection.InsertOne(ctx, bson.D{
 		{Key: "title", Value: product.Title},
 		{Key: "manufacture", Value: product.Manufacture},
 		{Key: "distribution_channel", Value: product.DistributionChannel},
@@ -56,9 +59,11 @@ func AddProduct(product ProductEntity) (*mongo.InsertOneResult, error) {
 }
 
 func AddNaverProducts(products []interface{}) (*mongo.InsertManyResult, error) {
-	conn, _, _ := external.MongoConn()
+	conn := external.MongoConn()
 	productsCollection := conn.Database("mealkit").Collection("products")
-	ret, err := productsCollection.InsertMany(context.TODO(), products)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	ret, err := productsCollection.InsertMany(ctx, products)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -16,20 +16,21 @@ type Brand struct {
 type Product struct {
 	ID             string   `json:"id"`
 	Name           string   `json:"name"`
-	ImageURL       string   `json:"imageUrl"`
+	Imageurl       string   `json:"imageurl"`
 	Price          int      `json:"price"`
 	Maker          *string  `json:"maker"`
 	Brand          *Brand   `json:"brand"`
-	MallName       string   `json:"mallName"`
-	MallProductURL string   `json:"mallProductUrl"`
-	DeliveryFee    int      `json:"deliveryFee"`
+	Mallname       string   `json:"mallname"`
+	Mallproducturl string   `json:"mallproducturl"`
+	Deliveryfee    int      `json:"deliveryfee"`
 	Category       Category `json:"category"`
 }
 
-type QueryInput struct {
+type ProductsInput struct {
 	Offset   int      `json:"offset"`
 	Limit    int      `json:"limit"`
 	Category Category `json:"category"`
+	Brand    *string  `json:"brand"`
 }
 
 type Category string

@@ -11,9 +11,10 @@ import (
 	"lessbutter.co/mealkit/config"
 )
 
-func MongoConn() (client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
+func MongoConn() (client *mongo.Client) {
 	conf := config.GetConfiguration()
-	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	credential := options.Credential{
 		Username: conf.MONGO_USERNAME,
 		Password: conf.MONGO_PASSWORD,
@@ -26,5 +27,5 @@ func MongoConn() (client *mongo.Client, ctx context.Context, cancel context.Canc
 	CheckErr(client.Ping(ctx, readpref.Primary()))
 
 	fmt.Println("MongoDB Connection Made")
-	return client, ctx, cancel
+	return client
 }
