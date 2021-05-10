@@ -1,0 +1,39 @@
+enum Category {
+  ALL
+  KOREAN
+  CHINESE
+  JAPANESE
+  ASIAN
+  ITALIAN
+  STEAK  
+}
+
+
+type Product {
+  id: ID!
+  name: String!
+  imageUrl: String!
+  price: Int!
+  maker: String
+  brand: Brand
+  mallName: String!
+  mallProductUrl: String!
+  deliveryFee: Int!
+  category: Category!
+}
+
+type Brand {
+  id: ID!
+  name: String!
+}
+
+input QueryInput {
+  offset: Int!
+  limit: Int!
+  category: Category!
+}
+
+type Query {
+  products(input: QueryInput!): [Product!]!
+  category(name: Category!): Category
+}

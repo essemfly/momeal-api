@@ -1,4 +1,4 @@
-package crawler
+package main
 
 import (
 	"encoding/json"
@@ -67,4 +67,15 @@ func CrawlNaverSearch(wg *sync.WaitGroup, pageNum int) {
 		log.Fatal("http Status Not OK")
 		wg.Done()
 	}
+}
+
+func main() {
+	log.Println("Main function Start")
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go CrawlNaverSearch(&wg, 1)
+
+	wg.Wait()
+	log.Println("Main function End")
 }

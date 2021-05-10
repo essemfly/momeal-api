@@ -1,4 +1,4 @@
-package crawler
+package main
 
 import (
 	"log"
@@ -37,4 +37,15 @@ func CrawlFreshEasy(wg *sync.WaitGroup, pageNum string) {
 	c.Visit(url)
 	log.Print("Page: " + pageNum + ", Total: " + strconv.Itoa(counts) + "products added")
 	wg.Done()
+}
+
+func main() {
+	log.Println("Main function Start")
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go CrawlFreshEasy(&wg, "1")
+
+	wg.Wait()
+	log.Println("Main function End")
 }

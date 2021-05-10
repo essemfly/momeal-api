@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"lessbutter.co/mealkit/storage"
+	"lessbutter.co/mealkit/external"
 )
 
 type ProductEntity struct {
@@ -39,7 +39,7 @@ type NaverProductEntity struct {
 }
 
 func AddProduct(product ProductEntity) (*mongo.InsertOneResult, error) {
-	conn, _ := storage.MongoConn()
+	conn, _, _ := external.MongoConn()
 	productsCollection := conn.Database("mealkit").Collection("products")
 	addProductResult, err := productsCollection.InsertOne(context.TODO(), bson.D{
 		{Key: "title", Value: product.Title},
@@ -56,7 +56,7 @@ func AddProduct(product ProductEntity) (*mongo.InsertOneResult, error) {
 }
 
 func AddNaverProducts(products []interface{}) (*mongo.InsertManyResult, error) {
-	conn, _ := storage.MongoConn()
+	conn, _, _ := external.MongoConn()
 	productsCollection := conn.Database("mealkit").Collection("products")
 	ret, err := productsCollection.InsertMany(context.TODO(), products)
 	if err != nil {
