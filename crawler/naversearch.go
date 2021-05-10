@@ -2,29 +2,13 @@ package crawler
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 	"sync"
-)
 
-type NaverProduct struct {
-	Name           string `json:"productName"`
-	Title          string `json:"productTitle"`
-	TitleOrg       string `json:"productTitleOrg"`
-	AttributeValue string `json:"attributeValue"`
-	CharacterValue string `json:"characterValue"`
-	ImageUrl       string `json:"imageUrl"`
-	Price          string `json:"price"`
-	PriceUnit      string `json:"priceUnit"`
-	Maker          string `json:"maker"`
-	Brand          string `json:"brand"`
-	MallName       string `json:"mallName"`
-	MallNameOrg    string `json:"mallNameOrg"`
-	MallProductUrl string `json:"mallProductUrl"`
-	DeliveryFee    string `json:"dlvryCont"`
-}
+	product "lessbutter.co/mealkit/domains"
+)
 
 type Mall struct {
 	Name             string `json:"name"`
@@ -33,56 +17,54 @@ type Mall struct {
 	MallIntroduction string `json:"mallIntroduction"`
 }
 
-func CrawlNaverSearch(wg *sync.WaitGroup, pageNum string) []NaverProduct {
-	// conn, _ := storage.MongoConn()
-	// productsCollection := conn.Database("mealkit").Collection("products")
-	// mallsCollection := conn.Database("mealkit").Collection("malls")
-
-	// Category ID
-	// url := fmt.Sprintf("https://search.shopping.naver.com/search/category?sort=rel&pagingIndex=%v&pagingSize=80&viewType=list&productSet=total&catId=50006808&deliveryFee=&deliveryTypeValue=&iq=&eq=&xq=", pageNum)
-	// Search Result
-	url := "https://search.shopping.naver.com/search/all?sort=date&pagingIndex=" + pageNum + "&pagingSize=80&viewType=list&productSet=total&query=%EB%B0%80%ED%82%A4%ED%8A%B8"
-	counts := 0
-
-	d := GetData(url)
-
-	var data map[string]interface{}
-	json.Unmarshal([]byte(d), &data)
-	shoppingResult := data["shoppingResult"]
-	productResults := shoppingResult["products"]
-	log.Print(data["shoppingResult"])
-
-	var pdSlice []NaverProduct
-	var pd NaverProduct
-	err := json.Unmarshal(d, &pd)
-
-	if err != nil {
-		panic(err)
-	}
-
-	log.Print("Page: " + pageNum + ", Total: " + strconv.Itoa(counts) + "products added")
-	wg.Done()
-
-	return pdSlice
+type ResponseParser struct {
+	ShoppingResult struct {
+		Products []product.NaverProductEntity `json:"products"`
+	} `json:"shoppingResult"`
 }
 
-func GetData(url string) []byte {
-	request, err := http.NewRequest("GET", url, nil)
+func CrawlNaverSearch(wg *sync.WaitGroup, pageNum int) {
+
+	url := "https://search.shopping.naver.com/search/all?sort=date&pagingIndex=" + strconv.Itoa(pageNum) + "&pagingSize=80&viewType=list&productSet=total&query=%EB%B0%80%ED%82%A4%ED%8A%B8"
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
-	var client = http.Client{}
-	response, err := client.Do(request)
-	if err != nil {
-		panic(err)
-	}
-	defer response.Body.Close()
+	log.Println("Page crawling: " + strconv.Itoa(pageNum))
 
-	jsonByte, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		panic(err)
-	}
+	req.Header.Add("user-agent", "Crawler")
+	req.Header.Add("urlprefix", "/api")
+	req.Header.Add("accept", "application/json")
 
-	return jsonByte
+	var client http.Client
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusOK {
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		response := &ResponseParser{}
+		json.NewDecoder(resp.Body).Decode(response)
+
+		products := make([]interface{}, 0)
+		for _, result := range response.ShoppingResult.Products {
+			products = append(products, result)
+		}
+		product.AddNaverProducts(products)
+
+		if len(products) == 80 {
+			wg.Add(1)
+			go CrawlNaverSearch(wg, pageNum+1)
+		}
+		wg.Done()
+	} else {
+		log.Fatal("http Status Not OK")
+		wg.Done()
+	}
 }
