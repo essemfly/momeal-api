@@ -11,8 +11,7 @@ import (
 	"lessbutter.co/mealkit/utils"
 )
 
-func MongoConn() (client *mongo.Client) {
-	conf := config.GetConfiguration()
+func MongoConn(conf config.Configuration) (client *mongo.Client) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	credential := options.Credential{

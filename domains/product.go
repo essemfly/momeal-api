@@ -7,7 +7,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"lessbutter.co/mealkit/external"
 	"lessbutter.co/mealkit/utils"
 )
 
@@ -53,8 +52,7 @@ type NaverMallEntity struct {
 	LogoUrl     map[string]string `json:"mallLogos"`
 }
 
-func AddProduct(product ProductEntity) (*mongo.InsertOneResult, error) {
-	conn := external.MongoConn()
+func AddProduct(conn *mongo.Client, product ProductEntity) (*mongo.InsertOneResult, error) {
 	productsCollection := conn.Database("mealkit").Collection("products")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -70,8 +68,7 @@ func AddProduct(product ProductEntity) (*mongo.InsertOneResult, error) {
 	return addProductResult, err
 }
 
-func AddNaverProducts(products []interface{}) (*mongo.InsertManyResult, error) {
-	conn := external.MongoConn()
+func AddNaverProducts(conn *mongo.Client, products []interface{}) (*mongo.InsertManyResult, error) {
 	productsCollection := conn.Database("mealkit").Collection("products")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -81,8 +78,7 @@ func AddNaverProducts(products []interface{}) (*mongo.InsertManyResult, error) {
 	return ret, err
 }
 
-func AddMall(mall NaverMallEntity) (*mongo.InsertOneResult, error) {
-	conn := external.MongoConn()
+func AddMall(conn *mongo.Client, mall NaverMallEntity) (*mongo.InsertOneResult, error) {
 	mallsCollection := conn.Database("mealkit").Collection("malls")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -97,8 +93,7 @@ func AddMall(mall NaverMallEntity) (*mongo.InsertOneResult, error) {
 	return addMallResult, err
 }
 
-func CheckMallExist(mall NaverMallEntity) bool {
-	conn := external.MongoConn()
+func CheckMallExist(conn *mongo.Client, mall NaverMallEntity) bool {
 	mallsCollection := conn.Database("mealkit").Collection("malls")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

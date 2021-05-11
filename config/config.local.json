@@ -2,5 +2,5 @@
     "MONGO_USERNAME": "master",
     "MONGO_PASSWORD": "secret",
     "MONGO_URL": "mongodb://localhost:27017",
-    "PORT": 3031
+    "PORT": 8080
 }

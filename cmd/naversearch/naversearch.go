@@ -9,7 +9,10 @@ import (
 	"sync"
 	"time"
 
+	"go.mongodb.org/mongo-driver/mongo"
+	"lessbutter.co/mealkit/config"
 	product "lessbutter.co/mealkit/domains"
+	"lessbutter.co/mealkit/external"
 	"lessbutter.co/mealkit/utils"
 )
 
@@ -19,7 +22,7 @@ type NaverSearchResponseParser struct {
 	} `json:"shoppingResult"`
 }
 
-func CrawlNaverSearchResult(wg *sync.WaitGroup, start, divide int) {
+func CrawlNaverSearchResult(conn *mongo.Client, wg *sync.WaitGroup, start, divide int) {
 	endNumber := 676
 	var client http.Client
 	for i := start; i < start+divide; i++ {
@@ -36,12 +39,12 @@ func CrawlNaverSearchResult(wg *sync.WaitGroup, start, divide int) {
 				products := parseResponse(response)
 				log.Println("Page crawling Success: " + strconv.Itoa(i))
 				if len(products) != 0 {
-					product.AddNaverProducts(products)
+					product.AddNaverProducts(conn, products)
 				}
 				if i == start {
 					time.Sleep(time.Second)
 					wg.Add(1)
-					go CrawlNaverSearchResult(wg, start+divide, divide)
+					go CrawlNaverSearchResult(conn, wg, start+divide, divide)
 				}
 
 				break
@@ -111,7 +114,9 @@ func main() {
 	var wg sync.WaitGroup
 
 	wg.Add(1)
-	go CrawlNaverSearchResult(&wg, 1, 10)
+	conf := config.GetConfiguration()
+	conn := external.MongoConn(conf)
+	go CrawlNaverSearchResult(conn, &wg, 1, 10)
 
 	wg.Wait()
 	log.Println("Main function End")

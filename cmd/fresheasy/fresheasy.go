@@ -7,10 +7,13 @@ import (
 	"sync"
 
 	"github.com/gocolly/colly"
+	"go.mongodb.org/mongo-driver/mongo"
+	"lessbutter.co/mealkit/config"
 	product "lessbutter.co/mealkit/domains"
+	"lessbutter.co/mealkit/external"
 )
 
-func CrawlFreshEasy(wg *sync.WaitGroup, pageNum string) {
+func CrawlFreshEasy(conn *mongo.Client, wg *sync.WaitGroup, pageNum string) {
 	url := "https://fresheasy.co.kr/goods/search_list?per=200&sorting=regist&page=" + pageNum
 	counts := 0
 
@@ -26,7 +29,7 @@ func CrawlFreshEasy(wg *sync.WaitGroup, pageNum string) {
 		priceInString := e.ChildText(".horizontal-list-item-info__sale-price")
 		temp.Price = strings.ReplaceAll(priceInString, "\"", "")
 
-		product.AddProduct(temp)
+		product.AddProduct(conn, temp)
 		counts += 1
 
 	})
@@ -44,7 +47,9 @@ func main() {
 	var wg sync.WaitGroup
 
 	wg.Add(1)
-	go CrawlFreshEasy(&wg, "1")
+	config := config.GetConfiguration()
+	conn := external.MongoConn(config)
+	go CrawlFreshEasy(conn, &wg, "1")
 
 	wg.Wait()
 	log.Println("Main function End")
