@@ -34,10 +34,10 @@ type Product struct {
 }
 
 type ProductsInput struct {
-	Offset   int          `json:"offset"`
-	Limit    int          `json:"limit"`
-	Category CategoryEnum `json:"category"`
-	Brand    *string      `json:"brand"`
+	Offset   int           `json:"offset"`
+	Limit    int           `json:"limit"`
+	Category *CategoryEnum `json:"category"`
+	Brand    *string       `json:"brand"`
 }
 
 type CategoryEnum string

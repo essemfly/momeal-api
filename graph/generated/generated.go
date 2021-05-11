@@ -321,7 +321,7 @@ type Brand {
 input ProductsInput {
   offset: Int!
   limit: Int!
-  category: CategoryEnum!
+  category: CategoryEnum
   brand: ID
 }
 
@@ -2252,7 +2252,7 @@ func (ec *executionContext) unmarshalInputProductsInput(ctx context.Context, obj
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("category"))
-			it.Category, err = ec.unmarshalNCategoryEnum2lessbutterᚗcoᚋmealkitᚋgraphᚋmodelᚐCategoryEnum(ctx, v)
+			it.Category, err = ec.unmarshalOCategoryEnum2ᚖlessbutterᚗcoᚋmealkitᚋgraphᚋmodelᚐCategoryEnum(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3206,6 +3206,22 @@ func (ec *executionContext) marshalOBrand2ᚖlessbutterᚗcoᚋmealkitᚋgraph�
 		return graphql.Null
 	}
 	return ec._Brand(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOCategoryEnum2ᚖlessbutterᚗcoᚋmealkitᚋgraphᚋmodelᚐCategoryEnum(ctx context.Context, v interface{}) (*model.CategoryEnum, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.CategoryEnum)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOCategoryEnum2ᚖlessbutterᚗcoᚋmealkitᚋgraphᚋmodelᚐCategoryEnum(ctx context.Context, sel ast.SelectionSet, v *model.CategoryEnum) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

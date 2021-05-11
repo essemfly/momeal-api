@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"lessbutter.co/mealkit/external"
 	"lessbutter.co/mealkit/graph/generated"
 	"lessbutter.co/mealkit/graph/model"
@@ -20,14 +21,19 @@ func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	dbfilter := bson.M{"skip": filter.Offset, "limit": filter.Limit}
-	if len(filter.Category) > 0 {
-		dbfilter = bson.M{"category": filter.Category, "skip": filter.Offset, "limit": filter.Limit}
+	dbfilter := bson.M{}
+	if filter.Category != nil {
+		dbfilter = bson.M{"category": filter.Category}
 	} else if filter.Brand != nil {
-		dbfilter = bson.M{"brand": filter.Brand, "skip": filter.Offset, "limit": filter.Limit}
+		dbfilter = bson.M{"brand": filter.Brand}
 	}
 
-	cur, err := collection.Find(ctx, dbfilter)
+	options := options.Find()
+	options.SetSort(bson.D{{"_id", -1}})
+	options.SetLimit(int64(filter.Limit))
+	options.SetSkip(int64(filter.Offset))
+
+	cur, err := collection.Find(ctx, dbfilter, options)
 	utils.CheckErr(err)
 
 	var products []*model.Product
