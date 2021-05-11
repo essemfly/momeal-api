@@ -13,13 +13,6 @@ import (
 	"lessbutter.co/mealkit/utils"
 )
 
-type Mall struct {
-	Name             string `json:"name"`
-	Address          string `json:"bizplBaseAddr"`
-	BusinessNo       string `json:"businessNo"`
-	MallIntroduction string `json:"mallIntroduction"`
-}
-
 type NaverSearchResponseParser struct {
 	ShoppingResult struct {
 		Products []product.NaverProductEntity `json:"products"`
@@ -27,7 +20,7 @@ type NaverSearchResponseParser struct {
 }
 
 func CrawlNaverSearchResult(wg *sync.WaitGroup, start, divide int) {
-	endNumber := 6767
+	endNumber := 676
 	var client http.Client
 	for i := start; i < start+divide; i++ {
 		if i > endNumber {
@@ -35,22 +28,25 @@ func CrawlNaverSearchResult(wg *sync.WaitGroup, start, divide int) {
 		}
 		url := "https://search.shopping.naver.com/search/all?sort=date&pagingIndex=" + strconv.Itoa(i) + "&pagingSize=80&viewType=list&productSet=total&query=%EB%B0%80%ED%82%A4%ED%8A%B8"
 		for {
-			products, ok := makeRequest(&client, url)
+			response, ok := makeRequest(&client, url)
 			if !ok {
 				log.Println("Retry: " + strconv.Itoa(i) + "")
 				time.Sleep(5 * time.Second)
 			} else {
+				products := parseResponse(response)
 				log.Println("Page crawling Success: " + strconv.Itoa(i))
 				if len(products) != 0 {
 					product.AddNaverProducts(products)
 				}
-				if i == start && len(products) == 80 {
+				if i == start {
+					time.Sleep(time.Second)
 					wg.Add(1)
 					go CrawlNaverSearchResult(wg, start+divide, divide)
 				}
 
 				break
 			}
+			defer response.Body.Close()
 		}
 
 		time.Sleep(5 * time.Second)
@@ -58,7 +54,7 @@ func CrawlNaverSearchResult(wg *sync.WaitGroup, start, divide int) {
 	wg.Done()
 }
 
-func makeRequest(client *http.Client, url string) ([]interface{}, bool) {
+func makeRequest(client *http.Client, url string) (*http.Response, bool) {
 	req, err := http.NewRequest("GET", url, nil)
 	utils.CheckErr(err)
 
@@ -68,15 +64,13 @@ func makeRequest(client *http.Client, url string) ([]interface{}, bool) {
 
 	resp, err := client.Do(req)
 	utils.CheckErr(err)
-	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusOK {
-		products := parseResponse(resp)
-		return products, true
+		return resp, true
 	} else {
 		b, _ := ioutil.ReadAll(resp.Body)
 		log.Println(string(b))
-		return nil, false
+		return resp, false
 	}
 }
 
@@ -86,9 +80,30 @@ func parseResponse(resp *http.Response) []interface{} {
 
 	products := make([]interface{}, 0)
 	for _, result := range searchResults.ShoppingResult.Products {
+		if !isValidCategory(result.Category1Name) {
+			log.Println("Different Category name: " + result.Category1Name + " -> " + result.MallProductUrl)
+			continue
+		}
+
+		// isAlreadyRegisteredMall := product.CheckMallExist(result.MallInfo)
+		// if !isAlreadyRegisteredMall {
+		// 	product.AddMall(result.MallInfo)
+		// }
+
 		products = append(products, result)
 	}
+
 	return products
+}
+
+func isValidCategory(category string) bool {
+	switch category {
+	case
+		"식품",
+		"출산/육아":
+		return true
+	}
+	return false
 }
 
 func main() {

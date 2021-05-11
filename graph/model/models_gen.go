@@ -9,77 +9,84 @@ import (
 )
 
 type Brand struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID          string  `json:"id"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Address     *string `json:"address"`
+}
+
+type Category struct {
+	Name             CategoryEnum `json:"name"`
+	Categoryimageurl string       `json:"categoryimageurl"`
 }
 
 type Product struct {
-	ID             string   `json:"id"`
-	Name           string   `json:"name"`
-	Imageurl       string   `json:"imageurl"`
-	Price          int      `json:"price"`
-	Maker          *string  `json:"maker"`
-	Brand          *Brand   `json:"brand"`
-	Mallname       string   `json:"mallname"`
-	Mallproducturl string   `json:"mallproducturl"`
-	Deliveryfee    int      `json:"deliveryfee"`
-	Category       Category `json:"category"`
+	ID             string    `json:"id"`
+	Name           string    `json:"name"`
+	Imageurl       string    `json:"imageurl"`
+	Price          int       `json:"price"`
+	Maker          *string   `json:"maker"`
+	Brand          *Brand    `json:"brand"`
+	Mallname       string    `json:"mallname"`
+	Mallproducturl string    `json:"mallproducturl"`
+	Deliveryfee    int       `json:"deliveryfee"`
+	Category       *Category `json:"category"`
 }
 
 type ProductsInput struct {
-	Offset   int      `json:"offset"`
-	Limit    int      `json:"limit"`
-	Category Category `json:"category"`
-	Brand    *string  `json:"brand"`
+	Offset   int          `json:"offset"`
+	Limit    int          `json:"limit"`
+	Category CategoryEnum `json:"category"`
+	Brand    *string      `json:"brand"`
 }
 
-type Category string
+type CategoryEnum string
 
 const (
-	CategoryAll      Category = "ALL"
-	CategoryKorean   Category = "KOREAN"
-	CategoryChinese  Category = "CHINESE"
-	CategoryJapanese Category = "JAPANESE"
-	CategoryAsian    Category = "ASIAN"
-	CategoryItalian  Category = "ITALIAN"
-	CategorySteak    Category = "STEAK"
+	CategoryEnumAll      CategoryEnum = "ALL"
+	CategoryEnumKorean   CategoryEnum = "KOREAN"
+	CategoryEnumChinese  CategoryEnum = "CHINESE"
+	CategoryEnumJapanese CategoryEnum = "JAPANESE"
+	CategoryEnumAsian    CategoryEnum = "ASIAN"
+	CategoryEnumItalian  CategoryEnum = "ITALIAN"
+	CategoryEnumSteak    CategoryEnum = "STEAK"
 )
 
-var AllCategory = []Category{
-	CategoryAll,
-	CategoryKorean,
-	CategoryChinese,
-	CategoryJapanese,
-	CategoryAsian,
-	CategoryItalian,
-	CategorySteak,
+var AllCategoryEnum = []CategoryEnum{
+	CategoryEnumAll,
+	CategoryEnumKorean,
+	CategoryEnumChinese,
+	CategoryEnumJapanese,
+	CategoryEnumAsian,
+	CategoryEnumItalian,
+	CategoryEnumSteak,
 }
 
-func (e Category) IsValid() bool {
+func (e CategoryEnum) IsValid() bool {
 	switch e {
-	case CategoryAll, CategoryKorean, CategoryChinese, CategoryJapanese, CategoryAsian, CategoryItalian, CategorySteak:
+	case CategoryEnumAll, CategoryEnumKorean, CategoryEnumChinese, CategoryEnumJapanese, CategoryEnumAsian, CategoryEnumItalian, CategoryEnumSteak:
 		return true
 	}
 	return false
 }
 
-func (e Category) String() string {
+func (e CategoryEnum) String() string {
 	return string(e)
 }
 
-func (e *Category) UnmarshalGQL(v interface{}) error {
+func (e *CategoryEnum) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
 	}
 
-	*e = Category(str)
+	*e = CategoryEnum(str)
 	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid Category", str)
+		return fmt.Errorf("%s is not a valid CategoryEnum", str)
 	}
 	return nil
 }
 
-func (e Category) MarshalGQL(w io.Writer) {
+func (e CategoryEnum) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

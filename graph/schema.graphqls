@@ -1,4 +1,4 @@
-enum Category {
+enum CategoryEnum {
   ALL
   KOREAN
   CHINESE
@@ -8,6 +8,10 @@ enum Category {
   STEAK  
 }
 
+type Category {
+  name: CategoryEnum!
+  categoryimageurl: String!
+}
 
 type Product {
   id: ID!
@@ -25,17 +29,19 @@ type Product {
 type Brand {
   id: ID!
   name: String!
+  description: String!
+  address: String
 }
 
 input ProductsInput {
   offset: Int!
   limit: Int!
-  category: Category!
+  category: CategoryEnum
   brand: ID
 }
 
 type Query {
-  products(input: ProductsInput!): [Product!]!
+  products(filter: ProductsInput!): [Product!]!
   categories: [Category!]!
   brands: [Brand!]!
 }

@@ -15,13 +15,19 @@ import (
 	"lessbutter.co/mealkit/utils"
 )
 
-func (r *queryResolver) Products(ctx context.Context, input model.ProductsInput) ([]*model.Product, error) {
+func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput) ([]*model.Product, error) {
 	collection := conn.Database("mealkit").Collection("products")
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	filter := bson.M{"brand": "프레시지"}
-	cur, err := collection.Find(ctx, filter)
+	dbfilter := bson.M{"skip": filter.Offset, "limit": filter.Limit}
+	if len(filter.Category) > 0 {
+		dbfilter = bson.M{"category": filter.Category, "skip": filter.Offset, "limit": filter.Limit}
+	} else if filter.Brand != nil {
+		dbfilter = bson.M{"brand": filter.Brand, "skip": filter.Offset, "limit": filter.Limit}
+	}
+
+	cur, err := collection.Find(ctx, dbfilter)
 	utils.CheckErr(err)
 
 	var products []*model.Product
@@ -34,12 +40,38 @@ func (r *queryResolver) Products(ctx context.Context, input model.ProductsInput)
 	return products, nil
 }
 
-func (r *queryResolver) Categories(ctx context.Context) ([]model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
+	collection := conn.Database("mealkit").Collection("categories")
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	cur, _ := collection.Find(ctx, bson.M{})
+
+	var categories []*model.Category
+	for cur.Next(ctx) {
+		var category *model.Category
+		err := cur.Decode(&category)
+		utils.CheckErr(err)
+		categories = append(categories, category)
+	}
+	return categories, nil
 }
 
 func (r *queryResolver) Brands(ctx context.Context) ([]*model.Brand, error) {
-	panic(fmt.Errorf("not implemented"))
+	collection := conn.Database("mealkit").Collection("malls")
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	cur, _ := collection.Find(ctx, bson.M{})
+
+	var brands []*model.Brand
+	for cur.Next(ctx) {
+		var brand *model.Brand
+		err := cur.Decode(&brand)
+		utils.CheckErr(err)
+		brands = append(brands, brand)
+	}
+	return brands, nil
 }
 
 // Query returns generated.QueryResolver implementation.
