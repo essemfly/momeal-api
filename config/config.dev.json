@@ -1,0 +1,6 @@
+{
+    "MONGO_USERNAME": "master",
+    "MONGO_PASSWORD": "secret",
+    "MONGO_URL": "mongodb://ec2-15-164-166-129.ap-northeast-2.compute.amazonaws.com",
+    "PORT": 8080
+}

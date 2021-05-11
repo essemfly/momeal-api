@@ -43,14 +43,16 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Brand struct {
-		Address     func(childComplexity int) int
-		Description func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Name        func(childComplexity int) int
+		Address       func(childComplexity int) int
+		Brandimageurl func(childComplexity int) int
+		Description   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Name          func(childComplexity int) int
 	}
 
 	Category struct {
 		Categoryimageurl func(childComplexity int) int
+		ID               func(childComplexity int) int
 		Name             func(childComplexity int) int
 	}
 
@@ -102,6 +104,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Brand.Address(childComplexity), true
 
+	case "Brand.brandimageurl":
+		if e.complexity.Brand.Brandimageurl == nil {
+			break
+		}
+
+		return e.complexity.Brand.Brandimageurl(childComplexity), true
+
 	case "Brand.description":
 		if e.complexity.Brand.Description == nil {
 			break
@@ -109,7 +118,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Brand.Description(childComplexity), true
 
-	case "Brand.id":
+	case "Brand.ID":
 		if e.complexity.Brand.ID == nil {
 			break
 		}
@@ -129,6 +138,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Category.Categoryimageurl(childComplexity), true
+
+	case "Category.ID":
+		if e.complexity.Category.ID == nil {
+			break
+		}
+
+		return e.complexity.Category.ID(childComplexity), true
 
 	case "Category.name":
 		if e.complexity.Category.Name == nil {
@@ -158,7 +174,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Product.Deliveryfee(childComplexity), true
 
-	case "Product.id":
+	case "Product.ID":
 		if e.complexity.Product.ID == nil {
 			break
 		}
@@ -284,22 +300,40 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 
 var sources = []*ast.Source{
 	{Name: "graph/schema.graphqls", Input: `enum CategoryEnum {
-  ALL
-  KOREAN
-  CHINESE
-  JAPANESE
-  ASIAN
-  ITALIAN
-  STEAK  
+  Hamultang
+  Yukgyejang
+  Maratang
+  Duonjangzzigye
+  Kimchizzigye
+  Gambas
+  Etcjeongol
+  Steak
+  Gogi
+  Umooktang
+  Churtang
+  Bibbimbap
+  Gobchangjeongol
+  Chunggukjang
+  Budaezzigye
+  Etc
+  Altang
+  Myun
+  Millefeuille
+  Uguzytang
+  Bunsik
+  Pasta
+  Sundubuzzigye
+  Kongbeasyzzigye
 }
 
 type Category {
+  ID: ID!
   name: CategoryEnum!
   categoryimageurl: String!
 }
 
 type Product {
-  id: ID!
+  ID: ID!
   name: String!
   imageurl: String!
   price: Int!
@@ -312,9 +346,10 @@ type Product {
 }
 
 type Brand {
-  id: ID!
+  ID: ID!
   name: String!
   description: String!
+  brandimageurl: String!
   address: String
 }
 
@@ -405,7 +440,7 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Brand_id(ctx context.Context, field graphql.CollectedField, obj *model.Brand) (ret graphql.Marshaler) {
+func (ec *executionContext) _Brand_ID(ctx context.Context, field graphql.CollectedField, obj *model.Brand) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -510,6 +545,41 @@ func (ec *executionContext) _Brand_description(ctx context.Context, field graphq
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Brand_brandimageurl(ctx context.Context, field graphql.CollectedField, obj *model.Brand) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Brand",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Brandimageurl, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Brand_address(ctx context.Context, field graphql.CollectedField, obj *model.Brand) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -540,6 +610,41 @@ func (ec *executionContext) _Brand_address(ctx context.Context, field graphql.Co
 	res := resTmp.(*string)
 	fc.Result = res
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Category_ID(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Category",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Category_name(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
@@ -612,7 +717,7 @@ func (ec *executionContext) _Category_categoryimageurl(ctx context.Context, fiel
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Product_id(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+func (ec *executionContext) _Product_ID(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2289,8 +2394,8 @@ func (ec *executionContext) _Brand(ctx context.Context, sel ast.SelectionSet, ob
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Brand")
-		case "id":
-			out.Values[i] = ec._Brand_id(ctx, field, obj)
+		case "ID":
+			out.Values[i] = ec._Brand_ID(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -2301,6 +2406,11 @@ func (ec *executionContext) _Brand(ctx context.Context, sel ast.SelectionSet, ob
 			}
 		case "description":
 			out.Values[i] = ec._Brand_description(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "brandimageurl":
+			out.Values[i] = ec._Brand_brandimageurl(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -2328,6 +2438,11 @@ func (ec *executionContext) _Category(ctx context.Context, sel ast.SelectionSet,
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Category")
+		case "ID":
+			out.Values[i] = ec._Category_ID(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "name":
 			out.Values[i] = ec._Category_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -2360,8 +2475,8 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Product")
-		case "id":
-			out.Values[i] = ec._Product_id(ctx, field, obj)
+		case "ID":
+			out.Values[i] = ec._Product_ID(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

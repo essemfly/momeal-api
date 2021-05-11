@@ -1,20 +1,38 @@
 enum CategoryEnum {
-  ALL
-  KOREAN
-  CHINESE
-  JAPANESE
-  ASIAN
-  ITALIAN
-  STEAK  
+  Hamultang
+  Yukgyejang
+  Maratang
+  Duonjangzzigye
+  Kimchizzigye
+  Gambas
+  Etcjeongol
+  Steak
+  Gogi
+  Umooktang
+  Churtang
+  Bibbimbap
+  Gobchangjeongol
+  Chunggukjang
+  Budaezzigye
+  Etc
+  Altang
+  Myun
+  Millefeuille
+  Uguzytang
+  Bunsik
+  Pasta
+  Sundubuzzigye
+  Kongbeasyzzigye
 }
 
 type Category {
+  ID: ID!
   name: CategoryEnum!
   categoryimageurl: String!
 }
 
 type Product {
-  id: ID!
+  ID: ID!
   name: String!
   imageurl: String!
   price: Int!
@@ -27,9 +45,10 @@ type Product {
 }
 
 type Brand {
-  id: ID!
+  ID: ID!
   name: String!
   description: String!
+  brandimageurl: String!
   address: String
 }
 

@@ -9,19 +9,21 @@ import (
 )
 
 type Brand struct {
-	ID          string  `json:"id"`
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Address     *string `json:"address"`
+	ID            string  `json:"ID"`
+	Name          string  `json:"name"`
+	Description   string  `json:"description"`
+	Brandimageurl string  `json:"brandimageurl"`
+	Address       *string `json:"address"`
 }
 
 type Category struct {
+	ID               string       `json:"ID"`
 	Name             CategoryEnum `json:"name"`
 	Categoryimageurl string       `json:"categoryimageurl"`
 }
 
 type Product struct {
-	ID             string    `json:"id"`
+	ID             string    `json:"ID"`
 	Name           string    `json:"name"`
 	Imageurl       string    `json:"imageurl"`
 	Price          int       `json:"price"`
@@ -43,28 +45,62 @@ type ProductsInput struct {
 type CategoryEnum string
 
 const (
-	CategoryEnumAll      CategoryEnum = "ALL"
-	CategoryEnumKorean   CategoryEnum = "KOREAN"
-	CategoryEnumChinese  CategoryEnum = "CHINESE"
-	CategoryEnumJapanese CategoryEnum = "JAPANESE"
-	CategoryEnumAsian    CategoryEnum = "ASIAN"
-	CategoryEnumItalian  CategoryEnum = "ITALIAN"
-	CategoryEnumSteak    CategoryEnum = "STEAK"
+	CategoryEnumHamultang       CategoryEnum = "Hamultang"
+	CategoryEnumYukgyejang      CategoryEnum = "Yukgyejang"
+	CategoryEnumMaratang        CategoryEnum = "Maratang"
+	CategoryEnumDuonjangzzigye  CategoryEnum = "Duonjangzzigye"
+	CategoryEnumKimchizzigye    CategoryEnum = "Kimchizzigye"
+	CategoryEnumGambas          CategoryEnum = "Gambas"
+	CategoryEnumEtcjeongol      CategoryEnum = "Etcjeongol"
+	CategoryEnumSteak           CategoryEnum = "Steak"
+	CategoryEnumGogi            CategoryEnum = "Gogi"
+	CategoryEnumUmooktang       CategoryEnum = "Umooktang"
+	CategoryEnumChurtang        CategoryEnum = "Churtang"
+	CategoryEnumBibbimbap       CategoryEnum = "Bibbimbap"
+	CategoryEnumGobchangjeongol CategoryEnum = "Gobchangjeongol"
+	CategoryEnumChunggukjang    CategoryEnum = "Chunggukjang"
+	CategoryEnumBudaezzigye     CategoryEnum = "Budaezzigye"
+	CategoryEnumEtc             CategoryEnum = "Etc"
+	CategoryEnumAltang          CategoryEnum = "Altang"
+	CategoryEnumMyun            CategoryEnum = "Myun"
+	CategoryEnumMillefeuille    CategoryEnum = "Millefeuille"
+	CategoryEnumUguzytang       CategoryEnum = "Uguzytang"
+	CategoryEnumBunsik          CategoryEnum = "Bunsik"
+	CategoryEnumPasta           CategoryEnum = "Pasta"
+	CategoryEnumSundubuzzigye   CategoryEnum = "Sundubuzzigye"
+	CategoryEnumKongbeasyzzigye CategoryEnum = "Kongbeasyzzigye"
 )
 
 var AllCategoryEnum = []CategoryEnum{
-	CategoryEnumAll,
-	CategoryEnumKorean,
-	CategoryEnumChinese,
-	CategoryEnumJapanese,
-	CategoryEnumAsian,
-	CategoryEnumItalian,
+	CategoryEnumHamultang,
+	CategoryEnumYukgyejang,
+	CategoryEnumMaratang,
+	CategoryEnumDuonjangzzigye,
+	CategoryEnumKimchizzigye,
+	CategoryEnumGambas,
+	CategoryEnumEtcjeongol,
 	CategoryEnumSteak,
+	CategoryEnumGogi,
+	CategoryEnumUmooktang,
+	CategoryEnumChurtang,
+	CategoryEnumBibbimbap,
+	CategoryEnumGobchangjeongol,
+	CategoryEnumChunggukjang,
+	CategoryEnumBudaezzigye,
+	CategoryEnumEtc,
+	CategoryEnumAltang,
+	CategoryEnumMyun,
+	CategoryEnumMillefeuille,
+	CategoryEnumUguzytang,
+	CategoryEnumBunsik,
+	CategoryEnumPasta,
+	CategoryEnumSundubuzzigye,
+	CategoryEnumKongbeasyzzigye,
 }
 
 func (e CategoryEnum) IsValid() bool {
 	switch e {
-	case CategoryEnumAll, CategoryEnumKorean, CategoryEnumChinese, CategoryEnumJapanese, CategoryEnumAsian, CategoryEnumItalian, CategoryEnumSteak:
+	case CategoryEnumHamultang, CategoryEnumYukgyejang, CategoryEnumMaratang, CategoryEnumDuonjangzzigye, CategoryEnumKimchizzigye, CategoryEnumGambas, CategoryEnumEtcjeongol, CategoryEnumSteak, CategoryEnumGogi, CategoryEnumUmooktang, CategoryEnumChurtang, CategoryEnumBibbimbap, CategoryEnumGobchangjeongol, CategoryEnumChunggukjang, CategoryEnumBudaezzigye, CategoryEnumEtc, CategoryEnumAltang, CategoryEnumMyun, CategoryEnumMillefeuille, CategoryEnumUguzytang, CategoryEnumBunsik, CategoryEnumPasta, CategoryEnumSundubuzzigye, CategoryEnumKongbeasyzzigye:
 		return true
 	}
 	return false

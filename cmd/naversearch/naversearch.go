@@ -36,7 +36,7 @@ func CrawlNaverSearchResult(conn *mongo.Client, wg *sync.WaitGroup, start, divid
 				log.Println("Retry: " + strconv.Itoa(i) + "")
 				time.Sleep(5 * time.Second)
 			} else {
-				products := parseResponse(response)
+				products := parseResponse(conn, response)
 				log.Println("Page crawling Success: " + strconv.Itoa(i))
 				if len(products) != 0 {
 					product.AddNaverProducts(conn, products)
@@ -77,7 +77,7 @@ func makeRequest(client *http.Client, url string) (*http.Response, bool) {
 	}
 }
 
-func parseResponse(resp *http.Response) []interface{} {
+func parseResponse(conn *mongo.Client, resp *http.Response) []interface{} {
 	searchResults := &NaverSearchResponseParser{}
 	json.NewDecoder(resp.Body).Decode(searchResults)
 
@@ -88,10 +88,10 @@ func parseResponse(resp *http.Response) []interface{} {
 			continue
 		}
 
-		// isAlreadyRegisteredMall := product.CheckMallExist(result.MallInfo)
-		// if !isAlreadyRegisteredMall {
-		// 	product.AddMall(result.MallInfo)
-		// }
+		isAlreadyRegisteredMall := product.CheckMallExist(conn, result.MallInfo)
+		if !isAlreadyRegisteredMall {
+			product.AddMall(conn, result.MallInfo)
+		}
 
 		products = append(products, result)
 	}

@@ -101,3 +101,13 @@ func CheckMallExist(conn *mongo.Client, mall NaverMallEntity) bool {
 	result := mallsCollection.FindOne(ctx, bson.M{"name": mall.Name})
 	return result.Err() == nil
 }
+
+func AddCategories(conn *mongo.Client, categories []interface{}) (*mongo.InsertManyResult, error) {
+	categoriesCollection := conn.Database("mealkit").Collection("categories")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	ret, err := categoriesCollection.InsertMany(ctx, categories)
+	utils.CheckErr(err)
+
+	return ret, err
+}
