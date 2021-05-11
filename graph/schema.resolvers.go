@@ -12,6 +12,7 @@ import (
 	"lessbutter.co/mealkit/external"
 	"lessbutter.co/mealkit/graph/generated"
 	"lessbutter.co/mealkit/graph/model"
+	"lessbutter.co/mealkit/utils"
 )
 
 func (r *queryResolver) Products(ctx context.Context, input model.ProductsInput) ([]*model.Product, error) {
@@ -21,13 +22,13 @@ func (r *queryResolver) Products(ctx context.Context, input model.ProductsInput)
 
 	filter := bson.M{"brand": "프레시지"}
 	cur, err := collection.Find(ctx, filter)
-	external.CheckErr(err)
+	utils.CheckErr(err)
 
 	var products []*model.Product
 	for cur.Next(ctx) {
 		var product *model.Product
 		err := cur.Decode(&product)
-		external.CheckErr(err)
+		utils.CheckErr(err)
 		products = append(products, product)
 	}
 	return products, nil

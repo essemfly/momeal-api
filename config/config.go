@@ -26,7 +26,6 @@ func GetConfiguration() Configuration {
 		os.Exit(500)
 	}
 
-	fmt.Println(configuration.PORT)
 	return configuration
 }
 
