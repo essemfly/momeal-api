@@ -10,7 +10,7 @@ import (
 
 	"github.com/lessbutter/mealkit/config"
 	"github.com/lessbutter/mealkit/src"
-	generated1 "github.com/lessbutter/mealkit/src/generated"
+	"github.com/lessbutter/mealkit/src/generated"
 	"github.com/lessbutter/mealkit/src/model"
 	"github.com/lessbutter/mealkit/src/utils"
 	"go.mongodb.org/mongo-driver/bson"
@@ -81,8 +81,8 @@ func (r *queryResolver) Brands(ctx context.Context) ([]*model.Brand, error) {
 	return brands, nil
 }
 
-// Query returns generated1.QueryResolver implementation.
-func (r *Resolver) Query() generated1.QueryResolver { return &queryResolver{r} }
+// Query returns generated.QueryResolver implementation.
+func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }
 
