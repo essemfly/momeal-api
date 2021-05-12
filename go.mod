@@ -1,4 +1,4 @@
-module lessbutter.co/mealkit
+module github.com/lessbutter/mealkit
 
 go 1.16
 

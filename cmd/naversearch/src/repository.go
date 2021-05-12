@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
+	"github.com/lessbutter/mealkit/src/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"lessbutter.co/mealkit/src/utils"
 )
 
 func AddNaverProducts(conn *mongo.Client, products []interface{}) (*mongo.InsertManyResult, error) {

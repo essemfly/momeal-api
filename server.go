@@ -8,9 +8,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"lessbutter.co/mealkit/config"
-	"lessbutter.co/mealkit/src/generated"
-	"lessbutter.co/mealkit/src/resolver"
+	"github.com/lessbutter/mealkit/config"
+	"github.com/lessbutter/mealkit/src/generated"
+	"github.com/lessbutter/mealkit/src/resolver"
 )
 
 func main() {

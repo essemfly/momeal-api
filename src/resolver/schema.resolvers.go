@@ -8,13 +8,13 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/lessbutter/mealkit/config"
+	"github.com/lessbutter/mealkit/src"
+	generated1 "github.com/lessbutter/mealkit/src/generated"
+	"github.com/lessbutter/mealkit/src/model"
+	"github.com/lessbutter/mealkit/src/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"lessbutter.co/mealkit/config"
-	"lessbutter.co/mealkit/src"
-	generated1 "lessbutter.co/mealkit/src/generated"
-	"lessbutter.co/mealkit/src/model"
-	"lessbutter.co/mealkit/src/utils"
 )
 
 func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput) ([]*model.Product, error) {

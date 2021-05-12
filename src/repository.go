@@ -6,7 +6,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"lessbutter.co/mealkit/src/utils"
+	"github.com/lessbutter/mealkit/src/utils"
 )
 
 func AddCategories(conn *mongo.Client, categories []interface{}) (*mongo.InsertManyResult, error) {

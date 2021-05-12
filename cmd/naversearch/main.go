@@ -9,11 +9,11 @@ import (
 	"sync"
 	"time"
 
+	"github.com/lessbutter/mealkit/cmd/naversearch/src"
+	"github.com/lessbutter/mealkit/config"
+	infra "github.com/lessbutter/mealkit/src"
+	"github.com/lessbutter/mealkit/src/utils"
 	"go.mongodb.org/mongo-driver/mongo"
-	"lessbutter.co/mealkit/cmd/naversearch/src"
-	"lessbutter.co/mealkit/config"
-	infra "lessbutter.co/mealkit/src"
-	"lessbutter.co/mealkit/src/utils"
 )
 
 type NaverSearchResponseParser struct {

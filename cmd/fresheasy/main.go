@@ -7,10 +7,10 @@ import (
 	"sync"
 
 	"github.com/gocolly/colly"
+	"github.com/lessbutter/mealkit/cmd/fresheasy/src"
+	"github.com/lessbutter/mealkit/config"
+	infra "github.com/lessbutter/mealkit/src"
 	"go.mongodb.org/mongo-driver/mongo"
-	"lessbutter.co/mealkit/cmd/fresheasy/src"
-	"lessbutter.co/mealkit/config"
-	infra "lessbutter.co/mealkit/src"
 )
 
 func CrawlFreshEasy(conn *mongo.Client, wg *sync.WaitGroup, pageNum string) {

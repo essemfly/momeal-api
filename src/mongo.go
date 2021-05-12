@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
+	"github.com/lessbutter/mealkit/config"
+	"github.com/lessbutter/mealkit/src/utils"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"lessbutter.co/mealkit/config"
-	"lessbutter.co/mealkit/src/utils"
 )
 
 func MongoConn(conf config.Configuration) (client *mongo.Client) {

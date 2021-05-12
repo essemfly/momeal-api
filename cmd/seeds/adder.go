@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
+	"github.com/lessbutter/mealkit/config"
+	infra "github.com/lessbutter/mealkit/src"
 	"go.mongodb.org/mongo-driver/mongo"
-	"lessbutter.co/mealkit/config"
-	infra "lessbutter.co/mealkit/src"
 )
 
 func addCategories(conn *mongo.Client) {
