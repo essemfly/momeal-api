@@ -1,4 +1,4 @@
-package graph
+package resolver
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
@@ -11,9 +11,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"lessbutter.co/mealkit/config"
-	"lessbutter.co/mealkit/graph/generated"
-	"lessbutter.co/mealkit/graph/model"
 	"lessbutter.co/mealkit/src"
+	generated1 "lessbutter.co/mealkit/src/generated"
+	"lessbutter.co/mealkit/src/model"
 	"lessbutter.co/mealkit/src/utils"
 )
 
@@ -81,8 +81,8 @@ func (r *queryResolver) Brands(ctx context.Context) ([]*model.Brand, error) {
 	return brands, nil
 }
 
-// Query returns generated.QueryResolver implementation.
-func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
+// Query returns generated1.QueryResolver implementation.
+func (r *Resolver) Query() generated1.QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }
 

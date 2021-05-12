@@ -31,7 +31,7 @@ type Product struct {
 	Brand          *Brand    `json:"brand"`
 	Mallname       string    `json:"mallname"`
 	Mallproducturl string    `json:"mallproducturl"`
-	Deliveryfee    int       `json:"deliveryfee"`
+	Deliveryfee    string    `json:"deliveryfee"`
 	Category       *Category `json:"category"`
 }
 
