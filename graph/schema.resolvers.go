@@ -6,7 +6,6 @@ package graph
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -45,7 +44,6 @@ func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput
 		utils.CheckErr(err)
 		products = append(products, product)
 	}
-	log.Println(products[0])
 	return products, nil
 }
 

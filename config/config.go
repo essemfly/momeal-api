@@ -32,7 +32,7 @@ func GetConfiguration() Configuration {
 func getFileName() string {
 	env := os.Getenv("ENV")
 	if len(env) == 0 {
-		env = "local"
+		env = "dev"
 	}
 	filename := []string{"/", "config.", env, ".json"}
 	_, dirname, _, _ := runtime.Caller(0)
