@@ -18,6 +18,7 @@ type Brand struct {
 
 type Category struct {
 	ID               string       `json:"ID"`
+	Label            string       `json:"label"`
 	Name             CategoryEnum `json:"name"`
 	Categoryimageurl string       `json:"categoryimageurl"`
 }

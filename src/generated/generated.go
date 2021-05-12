@@ -53,6 +53,7 @@ type ComplexityRoot struct {
 	Category struct {
 		Categoryimageurl func(childComplexity int) int
 		ID               func(childComplexity int) int
+		Label            func(childComplexity int) int
 		Name             func(childComplexity int) int
 	}
 
@@ -145,6 +146,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Category.ID(childComplexity), true
+
+	case "Category.label":
+		if e.complexity.Category.Label == nil {
+			break
+		}
+
+		return e.complexity.Category.Label(childComplexity), true
 
 	case "Category.name":
 		if e.complexity.Category.Name == nil {
@@ -328,6 +336,7 @@ var sources = []*ast.Source{
 
 type Category {
   ID: ID!
+  label: String!
   name: CategoryEnum!
   categoryimageurl: String!
 }
@@ -645,6 +654,41 @@ func (ec *executionContext) _Category_ID(ctx context.Context, field graphql.Coll
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Category_label(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Category",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Label, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Category_name(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
@@ -2440,6 +2484,11 @@ func (ec *executionContext) _Category(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = graphql.MarshalString("Category")
 		case "ID":
 			out.Values[i] = ec._Category_ID(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "label":
+			out.Values[i] = ec._Category_label(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

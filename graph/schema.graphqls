@@ -27,6 +27,7 @@ enum CategoryEnum {
 
 type Category {
   ID: ID!
+  label: String!
   name: CategoryEnum!
   categoryimageurl: String!
 }
