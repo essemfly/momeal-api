@@ -1,4 +1,4 @@
-package external
+package src
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"lessbutter.co/mealkit/config"
-	"lessbutter.co/mealkit/utils"
+	"lessbutter.co/mealkit/src/utils"
 )
 
 func MongoConn(conf config.Configuration) (client *mongo.Client) {

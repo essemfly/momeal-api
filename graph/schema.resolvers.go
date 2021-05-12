@@ -11,10 +11,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"lessbutter.co/mealkit/config"
-	"lessbutter.co/mealkit/external"
 	"lessbutter.co/mealkit/graph/generated"
 	"lessbutter.co/mealkit/graph/model"
-	"lessbutter.co/mealkit/utils"
+	"lessbutter.co/mealkit/src"
+	"lessbutter.co/mealkit/src/utils"
 )
 
 func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput) ([]*model.Product, error) {
@@ -92,7 +92,7 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
-var conn = external.MongoConn(config.GetConfiguration())
+var conn = src.MongoConn(config.GetConfiguration())
 
 func (r *queryResolver) Category(ctx context.Context, name model.Category) (*model.Category, error) {
 	panic(fmt.Errorf("not implemented"))

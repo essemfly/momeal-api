@@ -8,9 +8,9 @@ import (
 
 	"github.com/gocolly/colly"
 	"go.mongodb.org/mongo-driver/mongo"
+	"lessbutter.co/mealkit/cmd/fresheasy/src"
 	"lessbutter.co/mealkit/config"
-	product "lessbutter.co/mealkit/domains"
-	"lessbutter.co/mealkit/external"
+	infra "lessbutter.co/mealkit/src"
 )
 
 func CrawlFreshEasy(conn *mongo.Client, wg *sync.WaitGroup, pageNum string) {
@@ -22,14 +22,14 @@ func CrawlFreshEasy(conn *mongo.Client, wg *sync.WaitGroup, pageNum string) {
 	)
 
 	c.OnHTML(".horizontal-list-item", func(e *colly.HTMLElement) {
-		temp := product.ProductEntity{}
+		temp := src.FresheasyProductEntity{}
 		temp.DistributionUrl = "https://fresheasy.co.kr" + e.ChildAttr(".item_img_area a", "href")
 		temp.Title = e.ChildText(".goods_name a")
 		temp.DistributionChannel = "FreshEasy"
 		priceInString := e.ChildText(".horizontal-list-item-info__sale-price")
 		temp.Price = strings.ReplaceAll(priceInString, "\"", "")
 
-		product.AddProduct(conn, temp)
+		src.AddProduct(conn, temp)
 		counts += 1
 
 	})
@@ -48,7 +48,7 @@ func main() {
 
 	wg.Add(1)
 	config := config.GetConfiguration()
-	conn := external.MongoConn(config)
+	conn := infra.MongoConn(config)
 	go CrawlFreshEasy(conn, &wg, "1")
 
 	wg.Wait()

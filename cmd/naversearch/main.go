@@ -10,20 +10,20 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
+	"lessbutter.co/mealkit/cmd/naversearch/src"
 	"lessbutter.co/mealkit/config"
-	product "lessbutter.co/mealkit/domains"
-	"lessbutter.co/mealkit/external"
-	"lessbutter.co/mealkit/utils"
+	infra "lessbutter.co/mealkit/src"
+	"lessbutter.co/mealkit/src/utils"
 )
 
 type NaverSearchResponseParser struct {
 	ShoppingResult struct {
-		Products []product.NaverProductEntity `json:"products"`
+		Products []src.NaverProductEntity `json:"products"`
 	} `json:"shoppingResult"`
 }
 
 func CrawlNaverSearchResult(conn *mongo.Client, wg *sync.WaitGroup, start, divide int) {
-	endNumber := 676
+	endNumber := 679
 	var client http.Client
 	for i := start; i < start+divide; i++ {
 		if i > endNumber {
@@ -39,7 +39,7 @@ func CrawlNaverSearchResult(conn *mongo.Client, wg *sync.WaitGroup, start, divid
 				products := parseResponse(conn, response)
 				log.Println("Page crawling Success: " + strconv.Itoa(i))
 				if len(products) != 0 {
-					product.AddNaverProducts(conn, products)
+					src.AddNaverProducts(conn, products)
 				}
 				if i == start {
 					time.Sleep(time.Second)
@@ -88,9 +88,9 @@ func parseResponse(conn *mongo.Client, resp *http.Response) []interface{} {
 			continue
 		}
 
-		isAlreadyRegisteredMall := product.CheckMallExist(conn, result.MallInfo)
+		isAlreadyRegisteredMall := src.CheckMallExist(conn, result.MallInfo)
 		if !isAlreadyRegisteredMall {
-			product.AddMall(conn, result.MallInfo)
+			src.AddMall(conn, result.MallInfo)
 		}
 
 		products = append(products, result)
@@ -115,7 +115,7 @@ func main() {
 
 	wg.Add(1)
 	conf := config.GetConfiguration()
-	conn := external.MongoConn(conf)
+	conn := infra.MongoConn(conf)
 	go CrawlNaverSearchResult(conn, &wg, 1, 10)
 
 	wg.Wait()
