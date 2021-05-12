@@ -52,7 +52,10 @@ func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, erro
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	cur, _ := collection.Find(ctx, bson.M{})
+	options := options.Find()
+	options.SetSort(bson.D{{"order", 1}})
+
+	cur, _ := collection.Find(ctx, bson.M{}, options)
 
 	var categories []*model.Category
 	for cur.Next(ctx) {
@@ -65,11 +68,14 @@ func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, erro
 }
 
 func (r *queryResolver) Brands(ctx context.Context) ([]*model.Brand, error) {
-	collection := conn.Database("mealkit").Collection("malls")
+	collection := conn.Database("mealkit").Collection("brands")
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	cur, _ := collection.Find(ctx, bson.M{})
+	options := options.Find()
+	options.SetSort(bson.D{{"order", 1}})
+
+	cur, _ := collection.Find(ctx, bson.M{}, options)
 
 	var brands []*model.Brand
 	for cur.Next(ctx) {
