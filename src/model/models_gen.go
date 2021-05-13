@@ -13,6 +13,7 @@ type Brand struct {
 	Name          string `json:"name"`
 	Description   string `json:"description"`
 	Brandimageurl string `json:"brandimageurl"`
+	Onmain        bool   `json:"onmain"`
 }
 
 type Category struct {
@@ -20,6 +21,7 @@ type Category struct {
 	Label            string       `json:"label"`
 	Name             CategoryEnum `json:"name"`
 	Categoryimageurl string       `json:"categoryimageurl"`
+	Onmain           bool         `json:"onmain"`
 }
 
 type Product struct {

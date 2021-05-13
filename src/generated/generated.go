@@ -47,6 +47,7 @@ type ComplexityRoot struct {
 		Description   func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Name          func(childComplexity int) int
+		Onmain        func(childComplexity int) int
 	}
 
 	Category struct {
@@ -54,6 +55,7 @@ type ComplexityRoot struct {
 		ID               func(childComplexity int) int
 		Label            func(childComplexity int) int
 		Name             func(childComplexity int) int
+		Onmain           func(childComplexity int) int
 	}
 
 	Product struct {
@@ -123,6 +125,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Brand.Name(childComplexity), true
 
+	case "Brand.onmain":
+		if e.complexity.Brand.Onmain == nil {
+			break
+		}
+
+		return e.complexity.Brand.Onmain(childComplexity), true
+
 	case "Category.categoryimageurl":
 		if e.complexity.Category.Categoryimageurl == nil {
 			break
@@ -150,6 +159,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Category.Name(childComplexity), true
+
+	case "Category.onmain":
+		if e.complexity.Category.Onmain == nil {
+			break
+		}
+
+		return e.complexity.Category.Onmain(childComplexity), true
 
 	case "Product.brand":
 		if e.complexity.Product.Brand == nil {
@@ -316,6 +332,7 @@ type Category {
   label: String!
   name: CategoryEnum!
   categoryimageurl: String!
+  onmain: Boolean!
 }
 
 type Product {
@@ -334,6 +351,7 @@ type Brand {
   name: String!
   description: String!
   brandimageurl: String!
+  onmain: Boolean!
 }
 
 input ProductsInput {
@@ -563,6 +581,41 @@ func (ec *executionContext) _Brand_brandimageurl(ctx context.Context, field grap
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Brand_onmain(ctx context.Context, field graphql.CollectedField, obj *model.Brand) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Brand",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Onmain, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Category_ID(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -701,6 +754,41 @@ func (ec *executionContext) _Category_categoryimageurl(ctx context.Context, fiel
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Category_onmain(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Category",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Onmain, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Product_ID(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
@@ -2336,6 +2424,11 @@ func (ec *executionContext) _Brand(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "onmain":
+			out.Values[i] = ec._Brand_onmain(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2375,6 +2468,11 @@ func (ec *executionContext) _Category(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "categoryimageurl":
 			out.Values[i] = ec._Category_categoryimageurl(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "onmain":
+			out.Values[i] = ec._Category_onmain(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
