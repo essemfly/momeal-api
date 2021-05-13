@@ -308,6 +308,7 @@ var sources = []*ast.Source{
   Pasta
   Sundubuzzigye
   Kongbeasyzzigye
+  Bokumzzim
 }
 
 type Category {

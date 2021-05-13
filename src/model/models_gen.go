@@ -67,6 +67,7 @@ const (
 	CategoryEnumPasta           CategoryEnum = "Pasta"
 	CategoryEnumSundubuzzigye   CategoryEnum = "Sundubuzzigye"
 	CategoryEnumKongbeasyzzigye CategoryEnum = "Kongbeasyzzigye"
+	CategoryEnumBokumzzim       CategoryEnum = "Bokumzzim"
 )
 
 var AllCategoryEnum = []CategoryEnum{
@@ -94,11 +95,12 @@ var AllCategoryEnum = []CategoryEnum{
 	CategoryEnumPasta,
 	CategoryEnumSundubuzzigye,
 	CategoryEnumKongbeasyzzigye,
+	CategoryEnumBokumzzim,
 }
 
 func (e CategoryEnum) IsValid() bool {
 	switch e {
-	case CategoryEnumHamultang, CategoryEnumYukgyejang, CategoryEnumMaratang, CategoryEnumDuonjangzzigye, CategoryEnumKimchizzigye, CategoryEnumGambas, CategoryEnumEtcjeongol, CategoryEnumSteak, CategoryEnumGogi, CategoryEnumUmooktang, CategoryEnumChurtang, CategoryEnumBibbimbap, CategoryEnumGobchangjeongol, CategoryEnumChunggukjang, CategoryEnumBudaezzigye, CategoryEnumEtc, CategoryEnumAltang, CategoryEnumMyun, CategoryEnumMillefeuille, CategoryEnumUguzytang, CategoryEnumBunsik, CategoryEnumPasta, CategoryEnumSundubuzzigye, CategoryEnumKongbeasyzzigye:
+	case CategoryEnumHamultang, CategoryEnumYukgyejang, CategoryEnumMaratang, CategoryEnumDuonjangzzigye, CategoryEnumKimchizzigye, CategoryEnumGambas, CategoryEnumEtcjeongol, CategoryEnumSteak, CategoryEnumGogi, CategoryEnumUmooktang, CategoryEnumChurtang, CategoryEnumBibbimbap, CategoryEnumGobchangjeongol, CategoryEnumChunggukjang, CategoryEnumBudaezzigye, CategoryEnumEtc, CategoryEnumAltang, CategoryEnumMyun, CategoryEnumMillefeuille, CategoryEnumUguzytang, CategoryEnumBunsik, CategoryEnumPasta, CategoryEnumSundubuzzigye, CategoryEnumKongbeasyzzigye, CategoryEnumBokumzzim:
 		return true
 	}
 	return false

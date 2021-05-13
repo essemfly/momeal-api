@@ -23,6 +23,7 @@ enum CategoryEnum {
   Pasta
   Sundubuzzigye
   Kongbeasyzzigye
+  Bokumzzim
 }
 
 type Category {

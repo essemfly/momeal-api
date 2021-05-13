@@ -104,7 +104,7 @@ func addCategories(conn *mongo.Client) {
 			"label":            "기타 요리",
 			"name":             "Etc",
 			"categoryimageurl": "https://mealkit.s3.ap-northeast-2.amazonaws.com/categories/Etc.png",
-			"order":            23,
+			"order":            24,
 		},
 		{
 			"label":            "알탕",
@@ -153,6 +153,12 @@ func addCategories(conn *mongo.Client) {
 			"name":             "Kongbeasyzzigye",
 			"categoryimageurl": "https://mealkit.s3.ap-northeast-2.amazonaws.com/categories/Kongbeasyzzigye.png",
 			"order":            4,
+		},
+		{
+			"label":            "볶음, 찜요리",
+			"name":             "Bokumzzim",
+			"categoryimageurl": "https://mealkit.s3.ap-northeast-2.amazonaws.com/categories/Sundubuzzigye.png",
+			"order":            23,
 		},
 	}
 
