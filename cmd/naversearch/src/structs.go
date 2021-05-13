@@ -30,6 +30,8 @@ type NaverProductEntity struct {
 	MallInfo       NaverMallEntity `json:"mallInfoCache"`
 	OpenDate       string          `json:"openDate"`
 	CreatedAt      time.Time       `json:"created_at,omitempty" bson:"created_at"`
+	MomilBrand     string          `bson:"momilbrand"`
+	NaverProductId string          `json:"id" bson:"naver_product_id"`
 }
 
 type NaverMallEntity struct {

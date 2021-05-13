@@ -258,7 +258,7 @@ func addBrands(conn *mongo.Client) {
 			"order":         17,
 		},
 		{
-			"name":          "아로아키친",
+			"name":          "아로이키친",
 			"brandimageurl": "https://mealkit.s3.ap-northeast-2.amazonaws.com/brands/momil.png",
 			"order":         18,
 		},
