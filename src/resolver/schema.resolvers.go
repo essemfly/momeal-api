@@ -14,6 +14,7 @@ import (
 	"github.com/lessbutter/mealkit/src/model"
 	"github.com/lessbutter/mealkit/src/utils"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -24,9 +25,10 @@ func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput
 
 	dbfilter := bson.M{}
 	if filter.Category != nil {
-		dbfilter = bson.M{"category": filter.Category}
+		dbfilter = bson.M{"category.name": filter.Category}
 	} else if filter.Brand != nil {
-		dbfilter = bson.M{"brand": filter.Brand}
+		oid, _ := primitive.ObjectIDFromHex(*filter.Brand)
+		dbfilter = bson.M{"brand._id": oid}
 	}
 
 	options := options.Find()

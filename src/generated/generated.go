@@ -43,7 +43,6 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Brand struct {
-		Address       func(childComplexity int) int
 		Brandimageurl func(childComplexity int) int
 		Description   func(childComplexity int) int
 		ID            func(childComplexity int) int
@@ -58,16 +57,14 @@ type ComplexityRoot struct {
 	}
 
 	Product struct {
-		Brand          func(childComplexity int) int
-		Category       func(childComplexity int) int
-		Deliveryfee    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Imageurl       func(childComplexity int) int
-		Maker          func(childComplexity int) int
-		Mallname       func(childComplexity int) int
-		Mallproducturl func(childComplexity int) int
-		Name           func(childComplexity int) int
-		Price          func(childComplexity int) int
+		Brand       func(childComplexity int) int
+		Category    func(childComplexity int) int
+		Deliveryfee func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Imageurl    func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Price       func(childComplexity int) int
+		Producturl  func(childComplexity int) int
 	}
 
 	Query struct {
@@ -97,13 +94,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
-
-	case "Brand.address":
-		if e.complexity.Brand.Address == nil {
-			break
-		}
-
-		return e.complexity.Brand.Address(childComplexity), true
 
 	case "Brand.brandimageurl":
 		if e.complexity.Brand.Brandimageurl == nil {
@@ -196,27 +186,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Product.Imageurl(childComplexity), true
 
-	case "Product.maker":
-		if e.complexity.Product.Maker == nil {
-			break
-		}
-
-		return e.complexity.Product.Maker(childComplexity), true
-
-	case "Product.mallname":
-		if e.complexity.Product.Mallname == nil {
-			break
-		}
-
-		return e.complexity.Product.Mallname(childComplexity), true
-
-	case "Product.mallproducturl":
-		if e.complexity.Product.Mallproducturl == nil {
-			break
-		}
-
-		return e.complexity.Product.Mallproducturl(childComplexity), true
-
 	case "Product.name":
 		if e.complexity.Product.Name == nil {
 			break
@@ -230,6 +199,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Product.Price(childComplexity), true
+
+	case "Product.producturl":
+		if e.complexity.Product.Producturl == nil {
+			break
+		}
+
+		return e.complexity.Product.Producturl(childComplexity), true
 
 	case "Query.brands":
 		if e.complexity.Query.Brands == nil {
@@ -346,10 +322,8 @@ type Product {
   name: String!
   imageurl: String!
   price: Int!
-  maker: String
-  brand: Brand
-  mallname: String!
-  mallproducturl: String!
+  brand: Brand!
+  producturl: String!
   deliveryfee: String!
   category: Category!
 }
@@ -359,14 +333,13 @@ type Brand {
   name: String!
   description: String!
   brandimageurl: String!
-  address: String
 }
 
 input ProductsInput {
   offset: Int!
   limit: Int!
   category: CategoryEnum
-  brand: ID
+  brand: String
 }
 
 type Query {
@@ -587,38 +560,6 @@ func (ec *executionContext) _Brand_brandimageurl(ctx context.Context, field grap
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Brand_address(ctx context.Context, field graphql.CollectedField, obj *model.Brand) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Brand",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Address, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Category_ID(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
@@ -901,38 +842,6 @@ func (ec *executionContext) _Product_price(ctx context.Context, field graphql.Co
 	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Product_maker(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Product",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Maker, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Product_brand(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -958,49 +867,17 @@ func (ec *executionContext) _Product_brand(ctx context.Context, field graphql.Co
 		return graphql.Null
 	}
 	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.Brand)
-	fc.Result = res
-	return ec.marshalOBrand2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐBrand(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Product_mallname(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Product",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Mallname, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
 		if !graphql.HasFieldError(ctx, fc) {
 			ec.Errorf(ctx, "must not be null")
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*model.Brand)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNBrand2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐBrand(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Product_mallproducturl(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+func (ec *executionContext) _Product_producturl(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1018,7 +895,7 @@ func (ec *executionContext) _Product_mallproducturl(ctx context.Context, field g
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Mallproducturl, nil
+		return obj.Producturl, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2409,7 +2286,7 @@ func (ec *executionContext) unmarshalInputProductsInput(ctx context.Context, obj
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("brand"))
-			it.Brand, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			it.Brand, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2458,8 +2335,6 @@ func (ec *executionContext) _Brand(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "address":
-			out.Values[i] = ec._Brand_address(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2544,17 +2419,13 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "maker":
-			out.Values[i] = ec._Product_maker(ctx, field, obj)
 		case "brand":
 			out.Values[i] = ec._Product_brand(ctx, field, obj)
-		case "mallname":
-			out.Values[i] = ec._Product_mallname(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "mallproducturl":
-			out.Values[i] = ec._Product_mallproducturl(ctx, field, obj)
+		case "producturl":
+			out.Values[i] = ec._Product_producturl(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -3365,13 +3236,6 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return graphql.MarshalBoolean(*v)
 }
 
-func (ec *executionContext) marshalOBrand2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐBrand(ctx context.Context, sel ast.SelectionSet, v *model.Brand) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Brand(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalOCategoryEnum2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, v interface{}) (*model.CategoryEnum, error) {
 	if v == nil {
 		return nil, nil
@@ -3386,21 +3250,6 @@ func (ec *executionContext) marshalOCategoryEnum2ᚖgithubᚗcomᚋlessbutterᚋ
 		return graphql.Null
 	}
 	return v
-}
-
-func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := graphql.UnmarshalID(v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return graphql.MarshalID(*v)
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {

@@ -9,31 +9,28 @@ import (
 )
 
 type Brand struct {
-	ID            string  `json:"ID"`
-	Name          string  `json:"name"`
-	Description   string  `json:"description"`
-	Brandimageurl string  `json:"brandimageurl"`
-	Address       *string `json:"address"`
+	ID            string `json:"ID" bson:"_id"`
+	Name          string `json:"name"`
+	Description   string `json:"description"`
+	Brandimageurl string `json:"brandimageurl"`
 }
 
 type Category struct {
-	ID               string       `json:"ID"`
+	ID               string       `json:"ID" bson:"_id"`
 	Label            string       `json:"label"`
 	Name             CategoryEnum `json:"name"`
 	Categoryimageurl string       `json:"categoryimageurl"`
 }
 
 type Product struct {
-	ID             string    `json:"ID"`
-	Name           string    `json:"name"`
-	Imageurl       string    `json:"imageurl"`
-	Price          int       `json:"price"`
-	Maker          *string   `json:"maker"`
-	Brand          *Brand    `json:"brand"`
-	Mallname       string    `json:"mallname"`
-	Mallproducturl string    `json:"mallproducturl"`
-	Deliveryfee    string    `json:"deliveryfee"`
-	Category       *Category `json:"category"`
+	ID          string    `json:"ID" bson:"_id"`
+	Name        string    `json:"name"`
+	Imageurl    string    `json:"imageurl"`
+	Price       int       `json:"price"`
+	Brand       *Brand    `json:"brand" bson:"brand"`
+	Producturl  string    `json:"mallproducturl" bson:"producturl"`
+	Deliveryfee string    `json:"deliveryfee"`
+	Category    *Category `json:"category" bson:"category"`
 }
 
 type ProductsInput struct {

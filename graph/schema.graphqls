@@ -37,10 +37,8 @@ type Product {
   name: String!
   imageurl: String!
   price: Int!
-  maker: String
-  brand: Brand
-  mallname: String!
-  mallproducturl: String!
+  brand: Brand!
+  producturl: String!
   deliveryfee: String!
   category: Category!
 }
@@ -50,14 +48,13 @@ type Brand {
   name: String!
   description: String!
   brandimageurl: String!
-  address: String
 }
 
 input ProductsInput {
   offset: Int!
   limit: Int!
   category: CategoryEnum
-  brand: ID
+  brand: String
 }
 
 type Query {
