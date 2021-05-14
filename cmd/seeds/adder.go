@@ -81,13 +81,6 @@ func addCategories(conn *mongo.Client) {
 			"onmain":           true,
 		},
 		{
-			"label":            "추어탕",
-			"name":             "Churtang",
-			"categoryimageurl": "https://mealkit.s3.ap-northeast-2.amazonaws.com/categories/Churtang.png",
-			"order":            14,
-			"onmain":           false,
-		},
-		{
 			"label":            "덮밥/비빔밥",
 			"name":             "Bibbimbap",
 			"categoryimageurl": "https://mealkit.s3.ap-northeast-2.amazonaws.com/categories/Bibbimbap.png",
@@ -170,13 +163,6 @@ func addCategories(conn *mongo.Client) {
 			"categoryimageurl": "https://mealkit.s3.ap-northeast-2.amazonaws.com/categories/Sundubuzzigye.png",
 			"order":            1,
 			"onmain":           true,
-		},
-		{
-			"label":            "콩비지찌개",
-			"name":             "Kongbeasyzzigye",
-			"categoryimageurl": "https://mealkit.s3.ap-northeast-2.amazonaws.com/categories/Kongbeasyzzigye.png",
-			"order":            4,
-			"onmain":           false,
 		},
 		{
 			"label":            "볶음, 찜요리",
