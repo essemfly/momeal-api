@@ -25,14 +25,16 @@ type Category struct {
 }
 
 type Product struct {
-	ID          string    `json:"ID" bson:"_id"`
-	Name        string    `json:"name"`
-	Imageurl    string    `json:"imageurl"`
-	Price       int       `json:"price"`
-	Brand       *Brand    `json:"brand" bson:"brand"`
-	Producturl  string    `json:"mallproducturl" bson:"producturl"`
-	Deliveryfee string    `json:"deliveryfee"`
-	Category    *Category `json:"category" bson:"category"`
+	ID            string    `json:"ID" bson:"_id"`
+	Name          string    `json:"name"`
+	Imageurl      string    `json:"imageurl"`
+	Price         int       `json:"price"`
+	Brand         *Brand    `json:"brand" bson:"brand"`
+	Producturl    string    `json:"mallproducturl" bson:"producturl"`
+	Deliveryfee   string    `json:"deliveryfee"`
+	Category      *Category `json:"category" bson:"category"`
+	Purchasecount int       `json:"purchasecount"`
+	Mallname      string    `json:"mallname"`
 }
 
 type ProductsInput struct {

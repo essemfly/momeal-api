@@ -43,6 +43,8 @@ type Product {
   producturl: String!
   deliveryfee: String!
   category: Category!
+  purchasecount: Int!
+  mallname: String!
 }
 
 type Brand {
