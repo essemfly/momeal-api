@@ -31,10 +31,10 @@ func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput
 	}
 
 	if filter.Category != nil {
-		dbfilter = bson.M{"category.name": filter.Category}
+		dbfilter["category.name"] = filter.Category
 	} else if filter.Brand != nil {
 		oid, _ := primitive.ObjectIDFromHex(*filter.Brand)
-		dbfilter = bson.M{"brand._id": oid}
+		dbfilter["brand._id"] = oid
 	}
 
 	if filter.Search != nil {
