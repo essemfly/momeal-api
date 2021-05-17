@@ -31,6 +31,12 @@ func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput
 		dbfilter = bson.M{"brand._id": oid}
 	}
 
+	dbfilter["name"] = primitive.Regex{
+		Pattern: *filter.Search,
+		Options: "i",
+	}
+	// dbfilter = append(dbfilter, bson.M{"name": "seokmin"})
+
 	options := options.Find()
 	options.SetSort(bson.D{{"purchasecount", -1}})
 	options.SetLimit(int64(filter.Limit))

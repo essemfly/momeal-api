@@ -42,6 +42,7 @@ type ProductsInput struct {
 	Limit    int           `json:"limit"`
 	Category *CategoryEnum `json:"category"`
 	Brand    *string       `json:"brand"`
+	Search   *string       `json:"search"`
 }
 
 type CategoryEnum string

@@ -377,6 +377,7 @@ input ProductsInput {
   limit: Int!
   category: CategoryEnum
   brand: String
+  search: String
 }
 
 type Query {
@@ -2464,6 +2465,14 @@ func (ec *executionContext) unmarshalInputProductsInput(ctx context.Context, obj
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("brand"))
 			it.Brand, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "search":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("search"))
+			it.Search, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}

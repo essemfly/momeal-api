@@ -15,3 +15,5 @@
 # vendor/
 
 .DS_STORE
+
+config/config.*.json
