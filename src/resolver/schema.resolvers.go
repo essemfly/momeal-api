@@ -23,7 +23,13 @@ func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	dbfilter := bson.M{}
+	dbfilter := bson.M{
+		"$or": bson.A{
+			bson.M{"removed": false},
+			bson.M{"removed": bson.M{"$exists": false}},
+		},
+	}
+
 	if filter.Category != nil {
 		dbfilter = bson.M{"category.name": filter.Category}
 	} else if filter.Brand != nil {
@@ -31,11 +37,12 @@ func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput
 		dbfilter = bson.M{"brand._id": oid}
 	}
 
-	dbfilter["name"] = primitive.Regex{
-		Pattern: *filter.Search,
-		Options: "i",
+	if filter.Search != nil {
+		dbfilter["name"] = primitive.Regex{
+			Pattern: *filter.Search,
+			Options: "i",
+		}
 	}
-	// dbfilter = append(dbfilter, bson.M{"name": "seokmin"})
 
 	options := options.Find()
 	options.SetSort(bson.D{{"purchasecount", -1}})
