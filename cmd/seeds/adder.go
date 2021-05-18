@@ -294,7 +294,7 @@ func addBrands(conn *mongo.Client) {
 		},
 		{
 			Name:                "아로이키친",
-			Brandimageurl:       "https://mealkit.s3.ap-northeast-2.amazonaws.com/brands/momil.png",
+			Brandimageurl:       "https://mealkit.s3.ap-northeast-2.amazonaws.com/brands/rama.png",
 			Order:               18,
 			Onmain:              false,
 			CrawlFrom:           "smartstore",
@@ -357,7 +357,7 @@ func addBrands(conn *mongo.Client) {
 		},
 		{
 			Name:                "심플리쿡",
-			Brandimageurl:       "https://mealkit.s3.ap-northeast-2.amazonaws.com/brands/momil.png",
+			Brandimageurl:       "https://mealkit.s3.ap-northeast-2.amazonaws.com/brands/simplycook.png",
 			Order:               17,
 			Onmain:              false,
 			CrawlFrom:           "",
@@ -366,7 +366,7 @@ func addBrands(conn *mongo.Client) {
 		},
 		{
 			Name:                "테이스티나인",
-			Brandimageurl:       "https://mealkit.s3.ap-northeast-2.amazonaws.com/brands/momil.png",
+			Brandimageurl:       "https://mealkit.s3.ap-northeast-2.amazonaws.com/brands/tasty9.png",
 			Order:               19,
 			Onmain:              false,
 			CrawlFrom:           "",
