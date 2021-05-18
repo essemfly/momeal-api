@@ -248,7 +248,8 @@ func InferProductCategoryFromName(conn *mongo.Client, categories []model.Categor
 			return &cat
 		}
 	}
-	return nil
+	cat := infra.FindCategoryByLabel(conn, "기타 요리")
+	return &cat
 }
 
 func makeRequest(url string) (*http.Response, bool) {
