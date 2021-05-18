@@ -87,7 +87,7 @@ func AddBrands(conn *mongo.Client, brands []model.Brand) {
 }
 
 func AddProducts(conn *mongo.Client, products []model.Product) {
-	pc := conn.Database("mealkit").Collection("products2")
+	pc := conn.Database("mealkit").Collection("products")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
