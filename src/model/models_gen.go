@@ -9,15 +9,19 @@ import (
 )
 
 type Brand struct {
-	ID            string `json:"ID" bson:"_id"`
-	Name          string `json:"name"`
-	Description   string `json:"description"`
-	Brandimageurl string `json:"brandimageurl"`
-	Onmain        bool   `json:"onmain"`
+	ID                  string `json:"ID" bson:"_id,omitempty"`
+	Name                string `json:"name" bson:"name"`
+	Order               int    `json:"order" bson:"order"`
+	Description         string `json:"description" bson:"description,omitempty"`
+	Brandimageurl       string `json:"brandimageurl" bson:"brandimageurl"`
+	Onmain              bool   `json:"onmain" bson:"onmain"`
+	CrawlingUrl         string `json:"CrawlingUrl" bson:"crawlingurl,omitempty"`
+	CrawlFrom           string `json:"crawlform" bson:"crawlfrom"`
+	SmartstoreBrandName string `json:"smartstorebrandname" bson:"smartstorebrandname"`
 }
 
 type Category struct {
-	ID               string       `json:"ID" bson:"_id"`
+	ID               string       `json:"ID" bson:"_id,omitempty"`
 	Label            string       `json:"label"`
 	Name             CategoryEnum `json:"name"`
 	Categoryimageurl string       `json:"categoryimageurl"`
@@ -25,16 +29,19 @@ type Category struct {
 }
 
 type Product struct {
-	ID            string    `json:"ID" bson:"_id"`
-	Name          string    `json:"name"`
-	Imageurl      string    `json:"imageurl"`
-	Price         int       `json:"price"`
-	Brand         *Brand    `json:"brand" bson:"brand"`
-	Producturl    string    `json:"mallproducturl" bson:"producturl"`
-	Deliveryfee   string    `json:"deliveryfee"`
-	Category      *Category `json:"category" bson:"category"`
-	Purchasecount int       `json:"purchasecount"`
-	Mallname      string    `json:"mallname"`
+	ID              string    `json:"ID" bson:"_id,omitempty"`
+	Name            string    `json:"name"`
+	Imageurl        string    `json:"imageurl"`
+	Price           int       `json:"price" bson:"price"`
+	Discountedprice int       `json:"discountedprice"`
+	Brand           *Brand    `json:"brand" bson:"brand"`
+	Producturl      string    `json:"mallproducturl" bson:"producturl"`
+	Deliveryfee     string    `json:"deliveryfee"`
+	Category        *Category `json:"category" bson:"category"`
+	Purchasecount   int       `json:"purchasecount"`
+	Reviewcount     int       `json:"reviewcount"`
+	Reviewscore     float64   `json:"reviewscore"`
+	Mallname        string    `json:"mallname"`
 }
 
 type ProductsInput struct {

@@ -59,16 +59,19 @@ type ComplexityRoot struct {
 	}
 
 	Product struct {
-		Brand         func(childComplexity int) int
-		Category      func(childComplexity int) int
-		Deliveryfee   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Imageurl      func(childComplexity int) int
-		Mallname      func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Price         func(childComplexity int) int
-		Producturl    func(childComplexity int) int
-		Purchasecount func(childComplexity int) int
+		Brand           func(childComplexity int) int
+		Category        func(childComplexity int) int
+		Deliveryfee     func(childComplexity int) int
+		Discountedprice func(childComplexity int) int
+		ID              func(childComplexity int) int
+		Imageurl        func(childComplexity int) int
+		Mallname        func(childComplexity int) int
+		Name            func(childComplexity int) int
+		Price           func(childComplexity int) int
+		Producturl      func(childComplexity int) int
+		Purchasecount   func(childComplexity int) int
+		Reviewcount     func(childComplexity int) int
+		Reviewscore     func(childComplexity int) int
 	}
 
 	Query struct {
@@ -190,6 +193,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Product.Deliveryfee(childComplexity), true
 
+	case "Product.discountedprice":
+		if e.complexity.Product.Discountedprice == nil {
+			break
+		}
+
+		return e.complexity.Product.Discountedprice(childComplexity), true
+
 	case "Product.ID":
 		if e.complexity.Product.ID == nil {
 			break
@@ -238,6 +248,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Product.Purchasecount(childComplexity), true
+
+	case "Product.reviewcount":
+		if e.complexity.Product.Reviewcount == nil {
+			break
+		}
+
+		return e.complexity.Product.Reviewcount(childComplexity), true
+
+	case "Product.reviewscore":
+		if e.complexity.Product.Reviewscore == nil {
+			break
+		}
+
+		return e.complexity.Product.Reviewscore(childComplexity), true
 
 	case "Query.brands":
 		if e.complexity.Query.Brands == nil {
@@ -356,11 +380,14 @@ type Product {
   name: String!
   imageurl: String!
   price: Int!
+  discountedprice: Int!
   brand: Brand!
   producturl: String!
   deliveryfee: String!
   category: Category!
   purchasecount: Int!
+  reviewcount: Int!
+  reviewscore: Float!
   mallname: String!
 }
 
@@ -950,6 +977,41 @@ func (ec *executionContext) _Product_price(ctx context.Context, field graphql.Co
 	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Product_discountedprice(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Discountedprice, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Product_brand(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1123,6 +1185,76 @@ func (ec *executionContext) _Product_purchasecount(ctx context.Context, field gr
 	res := resTmp.(int)
 	fc.Result = res
 	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Product_reviewcount(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Reviewcount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Product_reviewscore(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Reviewscore, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Product_mallname(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
@@ -2615,6 +2747,11 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "discountedprice":
+			out.Values[i] = ec._Product_discountedprice(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "brand":
 			out.Values[i] = ec._Product_brand(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -2637,6 +2774,16 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "purchasecount":
 			out.Values[i] = ec._Product_purchasecount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "reviewcount":
+			out.Values[i] = ec._Product_reviewcount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "reviewscore":
+			out.Values[i] = ec._Product_reviewscore(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -3090,6 +3237,21 @@ func (ec *executionContext) unmarshalNCategoryEnum2githubᚗcomᚋlessbutterᚋm
 
 func (ec *executionContext) marshalNCategoryEnum2githubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, sel ast.SelectionSet, v model.CategoryEnum) graphql.Marshaler {
 	return v
+}
+
+func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v interface{}) (float64, error) {
+	res, err := graphql.UnmarshalFloat(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
+	res := graphql.MarshalFloat(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
 }
 
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {

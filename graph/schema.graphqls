@@ -39,11 +39,14 @@ type Product {
   name: String!
   imageurl: String!
   price: Int!
+  discountedprice: Int!
   brand: Brand!
   producturl: String!
   deliveryfee: String!
   category: Category!
   purchasecount: Int!
+  reviewcount: Int!
+  reviewscore: Float!
   mallname: String!
 }
 
