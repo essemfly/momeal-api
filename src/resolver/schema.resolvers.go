@@ -33,8 +33,7 @@ func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput
 	if filter.Category != nil {
 		dbfilter["category.name"] = filter.Category
 	} else if filter.Brand != nil {
-		oid, _ := primitive.ObjectIDFromHex(*filter.Brand)
-		dbfilter["brand._id"] = oid
+		dbfilter["brand._id"] = *filter.Brand
 	}
 
 	if filter.Search != nil {

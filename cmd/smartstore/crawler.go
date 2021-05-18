@@ -85,14 +85,13 @@ func BuildProductUrl(brandname string, productid int) string {
 
 func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []src.SmartstoreProductEntity, categories []model.Category) []model.Product {
 	var newProducts []model.Product
-	newBrand := infra.FindBrandByName(conn, brand.Name)
 	for _, product := range products {
 		newProduct := model.Product{
 			Name:            product.Name,
 			Imageurl:        product.Imageurl,
 			Price:           product.Benefits.MobileDiscountedSalePrice,
 			Discountedprice: product.Benefits.MobileSellerImmediateDiscountAmount,
-			Brand:           &newBrand,
+			Brand:           &brand,
 			Producturl:      BuildProductUrl(brand.SmartstoreBrandName, product.NaverProductId),
 			Deliveryfee:     strconv.Itoa(product.DeliveryInfo.BaseFee),
 			Category:        InferProductCategoryFromName(conn, categories, product.Name),
