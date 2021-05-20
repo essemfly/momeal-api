@@ -3,8 +3,8 @@ package main
 import (
 	"sync"
 
+	"github.com/lessbutter/mealkit/cmd/ownstore"
 	"github.com/lessbutter/mealkit/cmd/smartstore"
-	"github.com/lessbutter/mealkit/cmd/tasty9"
 	"github.com/lessbutter/mealkit/config"
 	infra "github.com/lessbutter/mealkit/src"
 	"github.com/lessbutter/mealkit/src/model"
@@ -28,7 +28,10 @@ func CrawlBrands(conn *mongo.Client, brands []model.Brand) {
 			go smartstore.CrawlSmartStore(conn, &wg, brand)
 		case "tasty9":
 			wg.Add(1)
-			go tasty9.CrawlTasty9(conn, &wg, brand)
+			go ownstore.CrawlTasty9(conn, &wg, brand)
+		case "peacock":
+			wg.Add(1)
+			go ownstore.CrawlPeacock(conn, &wg, brand)
 		default:
 
 		}
