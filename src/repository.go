@@ -86,12 +86,21 @@ func AddBrands(conn *mongo.Client, brands []model.Brand) {
 	}
 }
 
-func AddProducts(conn *mongo.Client, products []model.Product) {
+func AddProduct(conn *mongo.Client, product model.Product) {
 	pc := conn.Database("mealkit").Collection("products")
-
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
+	opts := options.Update().SetUpsert(true)
 
+	filter := bson.M{"name": product.Name}
+	_, err := pc.UpdateOne(ctx, filter, bson.M{"$set": product}, opts)
+	utils.CheckErr(err)
+}
+
+func AddProducts(conn *mongo.Client, products []model.Product) {
+	pc := conn.Database("mealkit").Collection("products")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	opts := options.Update().SetUpsert(true)
 
 	for _, product := range products {
