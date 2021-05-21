@@ -32,6 +32,9 @@ type SimplyCookProductEntity struct {
 	BeforeSellPrice  int    `json:"bfrSellAmt"`
 	DiscountedPrice  int    `json:"sellAmt"`
 	DiscountedPrice2 int    `json:"mbsDcAmt"`
+	SuppleFirmCd     string `json:"supplFirmCd"`
+	StorId           string `json:"storId"`
+	MallId           string `json:"mallId"`
 }
 
 func CrawlSimplycook(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
@@ -76,7 +79,7 @@ func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []S
 				Imageurl:        BuildImageurl(product.ItemImg),
 				Price:           product.DiscountedPrice,
 				Discountedprice: product.NormalPrice - product.DiscountedPrice,
-				Producturl:      "https://www.gsfresh.com/md/product_detail?itemId=" + product.ItemId,
+				Producturl:      "https://www.gsfresh.com/md/product_detail?itemId=" + product.ItemId + "&storId=" + product.StorId + "&supplFirmCd=" + product.SuppleFirmCd + "&mallId=" + product.MallId,
 				Deliveryfee:     "",
 				Brand:           &brand,
 				Category:        crawler.InferProductCategoryFromName(conn, categories, product.ItemName),
