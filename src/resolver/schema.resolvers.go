@@ -44,7 +44,7 @@ func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput
 	}
 
 	options := options.Find()
-	options.SetSort(bson.D{{"purchasecount", -1}})
+	options.SetSort(bson.M{"purchasecount": -1})
 	options.SetLimit(int64(filter.Limit))
 	options.SetSkip(int64(filter.Offset))
 
@@ -67,7 +67,7 @@ func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, erro
 	defer cancel()
 
 	options := options.Find()
-	options.SetSort(bson.D{{"order", 1}})
+	options.SetSort(bson.M{"order": 1})
 
 	cur, _ := collection.Find(ctx, bson.M{}, options)
 
@@ -87,7 +87,7 @@ func (r *queryResolver) Brands(ctx context.Context) ([]*model.Brand, error) {
 	defer cancel()
 
 	options := options.Find()
-	options.SetSort(bson.D{{"order", 1}})
+	options.SetSort(bson.M{"order": 1})
 
 	cur, _ := collection.Find(ctx, bson.M{}, options)
 
