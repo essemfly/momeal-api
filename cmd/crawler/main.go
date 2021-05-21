@@ -35,6 +35,9 @@ func CrawlBrands(conn *mongo.Client, brands []model.Brand) {
 		case "simplycook":
 			wg.Add(1)
 			go ownstore.CrawlSimplycook(conn, &wg, brand)
+		case "monokitchen":
+			wg.Add(1)
+			go ownstore.CrawlMonokitchen(conn, &wg, brand)
 		default:
 
 		}
