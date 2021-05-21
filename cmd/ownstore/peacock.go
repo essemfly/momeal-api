@@ -39,7 +39,7 @@ func CrawlPeacock(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 		reviewscore = strings.Replace(reviewscore, "점", "", 1)
 		reviewscoreFloat, _ := strconv.ParseFloat(reviewscore, 32)
 		product.Reviewscore = reviewscoreFloat
-		product.Mallname = "Emart Peacock"
+		product.Mallname = "emart"
 
 		if product.Name != "" {
 			infra.AddProduct(conn, product)

@@ -46,7 +46,7 @@ func CrawlTasty9(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 		product.Purchasecount = 0
 		product.Reviewcount = 0
 		product.Reviewscore = 0
-		product.Mallname = "Tasty9"
+		product.Mallname = "tasty9"
 
 		if product.Name != "" {
 			infra.AddProduct(conn, product)
