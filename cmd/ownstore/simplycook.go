@@ -79,7 +79,7 @@ func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []S
 				Imageurl:        BuildImageurl(product.ItemImg),
 				Price:           product.DiscountedPrice,
 				Discountedprice: product.NormalPrice - product.DiscountedPrice,
-				Producturl:      "https://www.gsfresh.com/md/product_detail?itemId=" + product.ItemId + "&storId=" + product.StorId + "&supplFirmCd=" + product.SuppleFirmCd + "&mallId=" + product.MallId,
+				Producturl:      "https://m.gsfresh.com/md/product_detail?itemId=" + product.ItemId + "&storId=" + product.StorId + "&supplFirmCd=" + product.SuppleFirmCd + "&mallId=" + product.MallId,
 				Deliveryfee:     "",
 				Brand:           &brand,
 				Category:        crawler.InferProductCategoryFromName(conn, categories, product.ItemName),
