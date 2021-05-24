@@ -25,6 +25,7 @@ type Category struct {
 	ID               string       `json:"ID" bson:"_id,omitempty"`
 	Label            string       `json:"label"`
 	Name             CategoryEnum `json:"name"`
+	Order            int          `json:"order"`
 	Categoryimageurl string       `json:"categoryimageurl"`
 	Onmain           bool         `json:"onmain"`
 }
@@ -86,6 +87,13 @@ const (
 	CategoryEnumSundubuzzigye   CategoryEnum = "Sundubuzzigye"
 	CategoryEnumKongbeasyzzigye CategoryEnum = "Kongbeasyzzigye"
 	CategoryEnumBokumzzim       CategoryEnum = "Bokumzzim"
+	CategoryEnumJjagle          CategoryEnum = "Jjagle"
+	CategoryEnumShabshab        CategoryEnum = "Shabshab"
+	CategoryEnumBulgogijeongol  CategoryEnum = "Bulgogijeongol"
+	CategoryEnumDakkalbi        CategoryEnum = "Dakkalbi"
+	CategoryEnumBokum           CategoryEnum = "Bokum"
+	CategoryEnumZzim            CategoryEnum = "Zzim"
+	CategoryEnumDonkkas         CategoryEnum = "Donkkas"
 )
 
 var AllCategoryEnum = []CategoryEnum{
@@ -114,11 +122,18 @@ var AllCategoryEnum = []CategoryEnum{
 	CategoryEnumSundubuzzigye,
 	CategoryEnumKongbeasyzzigye,
 	CategoryEnumBokumzzim,
+	CategoryEnumJjagle,
+	CategoryEnumShabshab,
+	CategoryEnumBulgogijeongol,
+	CategoryEnumDakkalbi,
+	CategoryEnumBokum,
+	CategoryEnumZzim,
+	CategoryEnumDonkkas,
 }
 
 func (e CategoryEnum) IsValid() bool {
 	switch e {
-	case CategoryEnumHamultang, CategoryEnumYukgyejang, CategoryEnumMaratang, CategoryEnumDuonjangzzigye, CategoryEnumKimchizzigye, CategoryEnumGambas, CategoryEnumEtcjeongol, CategoryEnumSteak, CategoryEnumGogi, CategoryEnumUmooktang, CategoryEnumChurtang, CategoryEnumBibbimbap, CategoryEnumGobchangjeongol, CategoryEnumChunggukjang, CategoryEnumBudaezzigye, CategoryEnumEtc, CategoryEnumAltang, CategoryEnumMyun, CategoryEnumMillefeuille, CategoryEnumUguzytang, CategoryEnumBunsik, CategoryEnumPasta, CategoryEnumSundubuzzigye, CategoryEnumKongbeasyzzigye, CategoryEnumBokumzzim:
+	case CategoryEnumHamultang, CategoryEnumYukgyejang, CategoryEnumMaratang, CategoryEnumDuonjangzzigye, CategoryEnumKimchizzigye, CategoryEnumGambas, CategoryEnumEtcjeongol, CategoryEnumSteak, CategoryEnumGogi, CategoryEnumUmooktang, CategoryEnumChurtang, CategoryEnumBibbimbap, CategoryEnumGobchangjeongol, CategoryEnumChunggukjang, CategoryEnumBudaezzigye, CategoryEnumEtc, CategoryEnumAltang, CategoryEnumMyun, CategoryEnumMillefeuille, CategoryEnumUguzytang, CategoryEnumBunsik, CategoryEnumPasta, CategoryEnumSundubuzzigye, CategoryEnumKongbeasyzzigye, CategoryEnumBokumzzim, CategoryEnumJjagle, CategoryEnumShabshab, CategoryEnumBulgogijeongol, CategoryEnumDakkalbi, CategoryEnumBokum, CategoryEnumZzim, CategoryEnumDonkkas:
 		return true
 	}
 	return false

@@ -406,6 +406,13 @@ var sources = []*ast.Source{
   Sundubuzzigye
   Kongbeasyzzigye
   Bokumzzim
+  Jjagle
+  Shabshab
+  Bulgogijeongol
+  Dakkalbi
+  Bokum
+  Zzim
+  Donkkas
 }
 
 scalar Time

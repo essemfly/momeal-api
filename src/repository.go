@@ -62,14 +62,18 @@ func FindCategoryByLabel(conn *mongo.Client, label string) model.Category {
 	return category
 }
 
-func AddCategories(conn *mongo.Client, categories []interface{}) (*mongo.InsertManyResult, error) {
+func AddCategories(conn *mongo.Client, categories []model.Category) {
 	categoriesCollection := conn.Database("mealkit").Collection("categories")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	ret, err := categoriesCollection.InsertMany(ctx, categories)
-	utils.CheckErr(err)
 
-	return ret, err
+	opts := options.Update().SetUpsert(true)
+
+	for _, cat := range categories {
+		filter := bson.M{"name": cat.Name}
+		_, err := categoriesCollection.UpdateOne(ctx, filter, bson.M{"$set": cat}, opts)
+		utils.CheckErr(err)
+	}
 }
 
 func AddBrands(conn *mongo.Client, brands []model.Brand) {
