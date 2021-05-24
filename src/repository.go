@@ -104,8 +104,15 @@ func AddProducts(conn *mongo.Client, products []model.Product) {
 	opts := options.Update().SetUpsert(true)
 
 	for _, product := range products {
+		var oldProduct model.Product
 		filter := bson.M{"name": product.Name}
-		_, err := pc.UpdateOne(ctx, filter, bson.M{"$set": product}, opts)
+		// 기존에 상품이 있었으면, 그 상품의 category는 바꾸지 않는다.
+		err := pc.FindOne(ctx, filter).Decode(&oldProduct)
+		if err == nil {
+			product.Category = oldProduct.Category
+			product.Created = oldProduct.Created
+		}
+		_, err = pc.UpdateOne(ctx, filter, bson.M{"$set": product}, opts)
 		utils.CheckErr(err)
 	}
 }

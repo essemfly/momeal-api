@@ -26,6 +26,8 @@ enum CategoryEnum {
   Bokumzzim
 }
 
+scalar Time
+
 type Category {
   ID: ID!
   label: String!
@@ -48,6 +50,11 @@ type Product {
   reviewcount: Int!
   reviewscore: Float!
   mallname: String!
+  originalid: String!
+  soldout: Boolean!
+  removed: Boolean!
+  created: Time!
+  updated: Time!
 }
 
 type Brand {

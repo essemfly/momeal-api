@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"strconv"
+	"time"
 )
 
 type Brand struct {
@@ -42,6 +43,11 @@ type Product struct {
 	Reviewcount     int       `json:"reviewcount"`
 	Reviewscore     float64   `json:"reviewscore"`
 	Mallname        string    `json:"mallname"`
+	Originalid      string    `json:"originalid"`
+	Soldout         bool      `json:"soldout"`
+	Removed         bool      `json:"removed"`
+	Created         time.Time `json:"created"`
+	Updated         time.Time `json:"updated"`
 }
 
 type ProductsInput struct {

@@ -5,6 +5,7 @@ import (
 	"log"
 	"strconv"
 	"sync"
+	"time"
 
 	crawler "github.com/lessbutter/mealkit/cmd/crawler/utils"
 	"github.com/lessbutter/mealkit/cmd/smartstore/src"
@@ -60,6 +61,10 @@ func BuildProductUrl(brandname string, productid int) string {
 	return "https://smartstore.naver.com/" + brandname + "/products/" + strconv.Itoa(productid)
 }
 
+func CheckOutofStock(status string) bool {
+	return status == "OUTOFSTOCK"
+}
+
 func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []src.SmartstoreProductEntity, categories []model.Category) []model.Product {
 	var newProducts []model.Product
 	for _, product := range products {
@@ -76,6 +81,11 @@ func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []s
 			Reviewcount:     product.ReviewAmount.TotalReviewCount,
 			Reviewscore:     float64(product.ReviewAmount.AverageReviewScore),
 			Mallname:        brand.CrawlFrom,
+			Originalid:      strconv.Itoa(product.NaverProductId),
+			Soldout:         CheckOutofStock(product.ProductStatus),
+			Removed:         false,
+			Created:         time.Now(),
+			Updated:         time.Now(),
 		}
 		newProducts = append(newProducts, newProduct)
 	}

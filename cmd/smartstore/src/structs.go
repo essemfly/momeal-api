@@ -46,6 +46,7 @@ type SmartstoreProductEntity struct {
 	Detail         DetailEntity       `json:"detailContents"`
 	FreeDelivery   bool               `json:"freeDelivery"`
 	TodayDelivery  bool               `json:"todayDelivery"`
+	ProductStatus  string             `json:"productStatusType"`
 }
 
 type SmartstoreResponseParser struct {
