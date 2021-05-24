@@ -3,7 +3,9 @@ package ownstore
 import (
 	"log"
 	"strconv"
+	"strings"
 	"sync"
+	"time"
 
 	crawler "github.com/lessbutter/mealkit/cmd/crawler/utils"
 	infra "github.com/lessbutter/mealkit/src"
@@ -42,13 +44,17 @@ func CrawlMonokitchen(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand)
 			product.Reviewcount = 0
 			product.Reviewscore = 0
 			product.Mallname = brand.CrawlFrom
+			product.Originalid = strings.Split(strings.Split(e.ChildAttr("a", "href"), "&")[0], "=")[1]
+			product.Soldout = false
+			product.Removed = false
+			product.Created = time.Now()
+			product.Updated = time.Now()
 
 			svgDiv := e.ChildAttr("a .img_box .thumbnail .centered svg filter", "id")
 			if len(svgDiv) > 0 {
-				log.Println("품절: " + product.Name)
-			} else {
-				infra.AddProduct(conn, product)
+				product.Soldout = true
 			}
+			infra.AddProduct(conn, product)
 		}
 	})
 
@@ -61,6 +67,8 @@ func CrawlMonokitchen(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand)
 		pageurl := url + "&page=" + strconv.Itoa(page)
 		c.Visit(pageurl)
 	}
+
+	log.Println(brand.Name + ": Finished")
 
 	wg.Done()
 }

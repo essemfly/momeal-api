@@ -363,6 +363,6 @@ func addBrands(conn *mongo.Client) {
 func main() {
 	conf := config.GetConfiguration()
 	conn := infra.MongoConn(conf)
-	// addCategories(conn)
+	addCategories(conn)
 	addBrands(conn)
 }

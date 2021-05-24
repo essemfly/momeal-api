@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	crawler "github.com/lessbutter/mealkit/cmd/crawler/utils"
 	infra "github.com/lessbutter/mealkit/src"
@@ -47,6 +48,11 @@ func CrawlTasty9(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 		product.Reviewcount = 0
 		product.Reviewscore = 0
 		product.Mallname = "tasty9"
+		product.Originalid = ""
+		product.Soldout = false
+		product.Removed = false
+		product.Created = time.Now()
+		product.Updated = time.Now()
 
 		if product.Name != "" {
 			infra.AddProduct(conn, product)
@@ -62,5 +68,6 @@ func CrawlTasty9(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 		c.Visit(pageurl)
 	}
 
+	log.Println(brand.Name + ": Finished")
 	wg.Done()
 }

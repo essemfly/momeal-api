@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	crawler "github.com/lessbutter/mealkit/cmd/crawler/utils"
 	infra "github.com/lessbutter/mealkit/src"
@@ -73,25 +74,31 @@ func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []S
 	var newProducts []model.Product
 	for _, product := range products {
 		possibleQty, _ := strconv.Atoi(product.SellPosbQty)
-		if possibleQty > 0 {
-			newProduct := model.Product{
-				Name:            product.ItemName,
-				Imageurl:        BuildImageurl(product.ItemImg),
-				Price:           product.DiscountedPrice,
-				Discountedprice: product.NormalPrice - product.DiscountedPrice,
-				Producturl:      "https://m.gsfresh.com/md/product_detail?itemId=" + product.ItemId + "&storId=" + product.StorId + "&supplFirmCd=" + product.SuppleFirmCd + "&mallId=" + product.MallId,
-				Deliveryfee:     "",
-				Brand:           &brand,
-				Category:        crawler.InferProductCategoryFromName(conn, categories, product.ItemName),
-				Purchasecount:   0,
-				Reviewcount:     0,
-				Reviewscore:     0.0,
-				Mallname:        brand.CrawlFrom,
-			}
-			newProducts = append(newProducts, newProduct)
-		} else {
-			log.Println(product.ItemName)
+
+		newProduct := model.Product{
+			Name:            product.ItemName,
+			Imageurl:        BuildImageurl(product.ItemImg),
+			Price:           product.DiscountedPrice,
+			Discountedprice: product.NormalPrice - product.DiscountedPrice,
+			Producturl:      "https://m.gsfresh.com/md/product_detail?itemId=" + product.ItemId + "&storId=" + product.StorId + "&supplFirmCd=" + product.SuppleFirmCd + "&mallId=" + product.MallId,
+			Deliveryfee:     "",
+			Brand:           &brand,
+			Category:        crawler.InferProductCategoryFromName(conn, categories, product.ItemName),
+			Purchasecount:   0,
+			Reviewcount:     0,
+			Reviewscore:     0.0,
+			Mallname:        brand.CrawlFrom,
+			Originalid:      product.ItemId,
+			Soldout:         true,
+			Removed:         false,
+			Created:         time.Now(),
+			Updated:         time.Now(),
 		}
+
+		if possibleQty > 0 {
+			newProduct.Soldout = false
+		}
+		newProducts = append(newProducts, newProduct)
 	}
 	return newProducts
 }

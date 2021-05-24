@@ -93,7 +93,15 @@ func AddProduct(conn *mongo.Client, product model.Product) {
 	opts := options.Update().SetUpsert(true)
 
 	filter := bson.M{"name": product.Name}
-	_, err := pc.UpdateOne(ctx, filter, bson.M{"$set": product}, opts)
+
+	var oldProduct model.Product
+	err := pc.FindOne(ctx, filter).Decode(&oldProduct)
+	if err == nil {
+		product.Category = oldProduct.Category
+		product.Created = oldProduct.Created
+		product.Removed = oldProduct.Removed
+	}
+	_, err = pc.UpdateOne(ctx, filter, bson.M{"$set": product}, opts)
 	utils.CheckErr(err)
 }
 
@@ -111,6 +119,7 @@ func AddProducts(conn *mongo.Client, products []model.Product) {
 		if err == nil {
 			product.Category = oldProduct.Category
 			product.Created = oldProduct.Created
+			product.Removed = oldProduct.Removed
 		}
 		_, err = pc.UpdateOne(ctx, filter, bson.M{"$set": product}, opts)
 		utils.CheckErr(err)

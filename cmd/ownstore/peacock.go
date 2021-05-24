@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -40,6 +41,15 @@ func CrawlPeacock(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 		reviewscoreFloat, _ := strconv.ParseFloat(reviewscore, 32)
 		product.Reviewscore = reviewscoreFloat
 		product.Mallname = "emart"
+		product.Originalid = e.ChildAttr(".cunit_prod .thmb a", "data-info")
+		product.Soldout = false
+		soldout := e.ChildText(".cunit_soldout")
+		if soldout != "" {
+			product.Soldout = true
+		}
+		product.Removed = false
+		product.Created = time.Now()
+		product.Updated = time.Now()
 
 		if product.Name != "" {
 			infra.AddProduct(conn, product)
@@ -52,5 +62,6 @@ func CrawlPeacock(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 
 	c.Visit(url)
 
+	log.Println(brand.Name + ": Finished")
 	wg.Done()
 }
