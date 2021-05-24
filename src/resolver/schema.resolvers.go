@@ -44,7 +44,7 @@ func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput
 	}
 
 	options := options.Find()
-	options.SetSort(bson.M{"purchasecount": -1})
+	options.SetSort(bson.D{{Key: "purchasecount", Value: -1}, {Key: "soldout", Value: 1}})
 	options.SetLimit(int64(filter.Limit))
 	options.SetSkip(int64(filter.Offset))
 
