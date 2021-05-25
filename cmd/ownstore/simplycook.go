@@ -15,7 +15,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type SimplycookResponseParser struct {
+type SimplyCookResponseParser struct {
 	Success bool `json:"success"`
 	Data    struct {
 		Fields []struct {
@@ -38,6 +38,14 @@ type SimplyCookProductEntity struct {
 	MallId           string `json:"mallId"`
 }
 
+type SimplyCookReviewEntity struct {
+	Success bool `json:"success"`
+	Data    struct {
+		EvlAvgScor string `json:"evlAvgScor"`
+		TotEvlCnt  string `json:"totEvlCnt"`
+	} `json:"data"`
+}
+
 func CrawlSimplycook(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 	resp, ok := crawler.MakeRequest(brand.CrawlingUrl)
 	defer resp.Body.Close()
@@ -45,7 +53,7 @@ func CrawlSimplycook(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) 
 		log.Println("Retry: " + brand.Name)
 	}
 
-	crawlResults := &SimplycookResponseParser{}
+	crawlResults := &SimplyCookResponseParser{}
 	json.NewDecoder(resp.Body).Decode(crawlResults)
 
 	categories := infra.ListCategories(conn)
@@ -76,6 +84,17 @@ func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []S
 	for _, product := range products {
 		possibleQty, _ := strconv.Atoi(product.SellPosbQty)
 
+		reviewUrl := "https://api.gsecretail.com/fo/md/itmcmgnt/item-basis-comment-evl-score?itemId=" + product.ItemId
+		resp, ok := crawler.MakeRequest(reviewUrl)
+		defer resp.Body.Close()
+		if !ok {
+			log.Println("Failed in getting review: " + brand.Name + " - " + product.ItemName)
+		}
+		reviewCrawlResults := &SimplyCookReviewEntity{}
+		json.NewDecoder(resp.Body).Decode(reviewCrawlResults)
+		reviewCount, _ := strconv.Atoi(reviewCrawlResults.Data.TotEvlCnt)
+		reviewScore, _ := strconv.ParseFloat(reviewCrawlResults.Data.EvlAvgScor, 32)
+
 		newProduct := model.Product{
 			Name:            product.ItemName,
 			Imageurl:        BuildImageurl(product.ItemImg),
@@ -86,8 +105,8 @@ func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []S
 			Brand:           &brand,
 			Category:        crawler.InferProductCategoryFromName(conn, categories, product.ItemName),
 			Purchasecount:   0,
-			Reviewcount:     0,
-			Reviewscore:     0.0,
+			Reviewcount:     reviewCount,
+			Reviewscore:     reviewScore,
 			Mallname:        brand.CrawlFrom,
 			Originalid:      product.ItemId,
 			Soldout:         true,
