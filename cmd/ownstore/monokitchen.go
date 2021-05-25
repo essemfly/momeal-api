@@ -54,7 +54,8 @@ func CrawlMonokitchen(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand)
 			if len(svgDiv) > 0 {
 				product.Soldout = true
 			}
-			infra.AddProduct(conn, product)
+			products := infra.UpdateProductsFieldExcept(conn, []*model.Product{&product})
+			infra.AddProducts(conn, products)
 		}
 	})
 

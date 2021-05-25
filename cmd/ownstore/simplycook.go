@@ -49,11 +49,12 @@ func CrawlSimplycook(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) 
 	json.NewDecoder(resp.Body).Decode(crawlResults)
 
 	categories := infra.ListCategories(conn)
-	var newProducts []model.Product
+	var newProducts []*model.Product
 	for _, field := range crawlResults.Data.Fields {
 		newProducts = append(newProducts, MapCrawlResultsToModels(conn, brand, field.Products, categories)...)
 	}
 
+	newProducts = infra.UpdateProductsFieldExcept(conn, newProducts)
 	infra.AddProducts(conn, newProducts)
 
 	log.Println(brand.Name + " NUM: " + strconv.Itoa(len(newProducts)))
@@ -70,8 +71,8 @@ func BuildImageurl(imgUrl string) string {
 	return preUrl
 }
 
-func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []SimplyCookProductEntity, categories []model.Category) []model.Product {
-	var newProducts []model.Product
+func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []SimplyCookProductEntity, categories []model.Category) []*model.Product {
+	var newProducts []*model.Product
 	for _, product := range products {
 		possibleQty, _ := strconv.Atoi(product.SellPosbQty)
 
@@ -98,7 +99,7 @@ func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []S
 		if possibleQty > 0 {
 			newProduct.Soldout = false
 		}
-		newProducts = append(newProducts, newProduct)
+		newProducts = append(newProducts, &newProduct)
 	}
 	return newProducts
 }

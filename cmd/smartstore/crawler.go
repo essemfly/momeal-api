@@ -46,7 +46,7 @@ func CrawlSmartStore(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) 
 			products = append(products, MapCrawlResultsToModels(conn, brand, results.Products, categories)...)
 		}
 	}
-
+	products = infra.UpdateProductsFieldExcept(conn, products)
 	infra.AddProducts(conn, products)
 
 	log.Println(brand.Name + " NUM: " + strconv.Itoa(len(products)))
@@ -65,8 +65,8 @@ func CheckOutofStock(status string) bool {
 	return status == "OUTOFSTOCK"
 }
 
-func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []src.SmartstoreProductEntity, categories []model.Category) []model.Product {
-	var newProducts []model.Product
+func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []src.SmartstoreProductEntity, categories []model.Category) []*model.Product {
+	var newProducts []*model.Product
 	for _, product := range products {
 		newProduct := model.Product{
 			Name:            product.Name,
@@ -87,7 +87,7 @@ func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []s
 			Created:         time.Now(),
 			Updated:         time.Now(),
 		}
-		newProducts = append(newProducts, newProduct)
+		newProducts = append(newProducts, &newProduct)
 	}
 	return newProducts
 }

@@ -52,7 +52,8 @@ func CrawlPeacock(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 		product.Updated = time.Now()
 
 		if product.Name != "" {
-			infra.AddProduct(conn, product)
+			products := infra.UpdateProductsFieldExcept(conn, []*model.Product{&product})
+			infra.AddProducts(conn, products)
 		}
 	})
 

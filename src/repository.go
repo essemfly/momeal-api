@@ -90,42 +90,44 @@ func AddBrands(conn *mongo.Client, brands []model.Brand) {
 	}
 }
 
-func AddProduct(conn *mongo.Client, product model.Product) {
+func AddProduct(conn *mongo.Client, product *model.Product) {
 	pc := conn.Database("mealkit").Collection("products")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	opts := options.Update().SetUpsert(true)
 
-	filter := bson.M{"name": product.Name}
-
-	var oldProduct model.Product
-	err := pc.FindOne(ctx, filter).Decode(&oldProduct)
-	if err == nil {
-		product.Category = oldProduct.Category
-		product.Created = oldProduct.Created
-		product.Removed = oldProduct.Removed
-	}
-	_, err = pc.UpdateOne(ctx, filter, bson.M{"$set": product}, opts)
+	filter := bson.M{"name": &product.Name}
+	_, err := pc.UpdateOne(ctx, filter, bson.M{"$set": &product}, opts)
 	utils.CheckErr(err)
 }
 
-func AddProducts(conn *mongo.Client, products []model.Product) {
+func UpdateProductsFieldExcept(conn *mongo.Client, products []*model.Product) []*model.Product {
 	pc := conn.Database("mealkit").Collection("products")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	opts := options.Update().SetUpsert(true)
 
 	for _, product := range products {
 		var oldProduct model.Product
-		filter := bson.M{"name": product.Name}
-		// 기존에 상품이 있었으면, 그 상품의 category는 바꾸지 않는다.
+		filter := bson.M{"name": &product.Name}
 		err := pc.FindOne(ctx, filter).Decode(&oldProduct)
 		if err == nil {
 			product.Category = oldProduct.Category
 			product.Created = oldProduct.Created
 			product.Removed = oldProduct.Removed
 		}
-		_, err = pc.UpdateOne(ctx, filter, bson.M{"$set": product}, opts)
+	}
+	return products
+}
+
+func AddProducts(conn *mongo.Client, products []*model.Product) {
+	pc := conn.Database("mealkit").Collection("products")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	opts := options.Update().SetUpsert(true)
+
+	for _, product := range products {
+		filter := bson.M{"name": product.Name}
+		_, err := pc.UpdateOne(ctx, filter, bson.M{"$set": &product}, opts)
 		utils.CheckErr(err)
 	}
 }
