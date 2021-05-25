@@ -162,6 +162,7 @@ func WriteCrawlingUpdateRecord(conn *mongo.Client) {
 	outProducts, err := pc.CountDocuments(
 		ctx,
 		bson.M{
+			"removed": false,
 			"updated": bson.M{
 				"$lte": primitive.NewDateTimeFromTime(lastUpdatedDate),
 			},
