@@ -32,6 +32,7 @@ type Node struct {
 func CrawlCookit(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 	log.Println("Cookit gogosing")
 
+	categories := infra.ListCategories(conn)
 	resp, ok := crawler.MakeRequest(brand.CrawlingUrl)
 	defer resp.Body.Close()
 	if !ok {
@@ -77,6 +78,7 @@ func CrawlCookit(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 			Discountedprice: discountedPriceInt,
 			Brand:           &brand,
 			Deliveryfee:     "",
+			Category:        crawler.InferProductCategoryFromName(conn, categories, name),
 			Reviewcount:     reviewcount,
 			Reviewscore:     reviewscoreFloat,
 			Mallname:        brand.CrawlFrom,
