@@ -46,4 +46,5 @@ func CrawlBrands(conn *mongo.Client, brands []model.Brand) {
 		}
 	}
 	wg.Wait()
+	infra.WriteCrawlingUpdateRecord(conn)
 }

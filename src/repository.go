@@ -2,8 +2,11 @@ package src
 
 import (
 	"context"
+	"log"
+	"strconv"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
@@ -114,6 +117,9 @@ func UpdateProductsFieldExcept(conn *mongo.Client, products []*model.Product) []
 			product.Category = oldProduct.Category
 			product.Created = oldProduct.Created
 			product.Removed = oldProduct.Removed
+			product.IsNew = false
+		} else {
+			product.IsNew = true
 		}
 	}
 	return products
@@ -130,4 +136,39 @@ func AddProducts(conn *mongo.Client, products []*model.Product) {
 		_, err := pc.UpdateOne(ctx, filter, bson.M{"$set": &product}, opts)
 		utils.CheckErr(err)
 	}
+}
+
+func WriteCrawlingUpdateRecord(conn *mongo.Client) {
+	c := conn.Database("mealkit").Collection("crawling_records")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	options := options.FindOne()
+	options.SetSort(bson.M{"_id": -1})
+
+	var lastRecord model.CrawlingRecord
+	err := c.FindOne(ctx, bson.M{}, options).Decode(&lastRecord)
+
+	lastUpdatedDate := lastRecord.Date
+	if err != nil {
+		lastUpdatedDate = time.Now().UTC()
+	}
+
+	pc := conn.Database("mealkit").Collection("products")
+	filter := bson.M{"isnew": true, "removed": false}
+	newProducts, err := pc.CountDocuments(ctx, filter)
+	utils.CheckErr(err)
+
+	outProducts, err := pc.CountDocuments(
+		ctx,
+		bson.M{
+			"updated": bson.M{
+				"$lte": primitive.NewDateTimeFromTime(lastUpdatedDate),
+			},
+		})
+	utils.CheckErr(err)
+
+	c.InsertOne(ctx, bson.M{"date": time.Now(), "newproducts": newProducts, "outproducts": outProducts})
+	log.Println("Last Update:" + lastUpdatedDate.String())
+	log.Println("NEW_PRODUCTS:" + strconv.Itoa(int(newProducts)) + "  OUT_PRODUCTS: " + strconv.Itoa(int(outProducts)))
 }

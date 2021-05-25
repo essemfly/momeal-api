@@ -9,6 +9,12 @@ import (
 	"time"
 )
 
+type CrawlingRecord struct {
+	NewProducts int       `json:"newproducts"`
+	OutProducts int       `json:"outproducts"`
+	Date        time.Time `json:"date"`
+}
+
 type Brand struct {
 	ID                  string `json:"ID" bson:"_id,omitempty"`
 	Name                string `json:"name" bson:"name"`
@@ -49,6 +55,7 @@ type Product struct {
 	Removed         bool      `json:"removed"`
 	Created         time.Time `json:"created"`
 	Updated         time.Time `json:"updated"`
+	IsNew           bool      `json:"isnew"`
 }
 
 type ProductsInput struct {
