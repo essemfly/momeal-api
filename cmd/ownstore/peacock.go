@@ -22,6 +22,7 @@ func CrawlPeacock(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 	c := colly.NewCollector(
 		colly.AllowedDomains("emart.ssg.com"),
 	)
+	num := 0
 
 	c.OnHTML(".cunit_t232", func(e *colly.HTMLElement) {
 		var product model.Product
@@ -52,6 +53,7 @@ func CrawlPeacock(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 		product.Updated = time.Now()
 
 		if product.Name != "" {
+			num += 1
 			products := infra.UpdateProductsFieldExcept(conn, []*model.Product{&product})
 			infra.AddProducts(conn, products)
 		}
@@ -63,6 +65,6 @@ func CrawlPeacock(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 
 	c.Visit(url)
 
-	log.Println(brand.Name + ": Finished")
+	log.Println(brand.Name + " NUM: " + strconv.Itoa(num))
 	wg.Done()
 }

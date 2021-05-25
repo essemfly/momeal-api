@@ -24,11 +24,13 @@ func CrawlMonokitchen(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand)
 	c := colly.NewCollector(
 		colly.AllowedDomains("mono-kitchen.co.kr"),
 	)
+	num := 0
 
 	c.OnHTML(".list_kitchen li", func(e *colly.HTMLElement) {
 		var product model.Product
 		product.Name = e.ChildText("a .info_box .tit")
 		if len(product.Name) > 0 {
+			num += 1
 			product.Price = utils.ParsePriceString(e.ChildText("a .info_box .pay .cost span"))
 			product.Discountedprice = 0
 			originalPrice := utils.ParsePriceString(e.ChildText("a .info_box .pay .discount span"))
@@ -69,7 +71,7 @@ func CrawlMonokitchen(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand)
 		c.Visit(pageurl)
 	}
 
-	log.Println(brand.Name + ": Finished")
+	log.Println(brand.Name + " NUM: " + strconv.Itoa(num))
 
 	wg.Done()
 }

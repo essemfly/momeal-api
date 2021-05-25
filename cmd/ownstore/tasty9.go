@@ -23,6 +23,7 @@ func CrawlTasty9(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 	c := colly.NewCollector(
 		colly.AllowedDomains("tasty9.com", "www.tasty9.com"),
 	)
+	num := 0
 
 	c.OnHTML(".box", func(e *colly.HTMLElement) {
 		var product model.Product
@@ -55,6 +56,7 @@ func CrawlTasty9(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 		product.Updated = time.Now()
 
 		if product.Name != "" {
+			num += 1
 			products := infra.UpdateProductsFieldExcept(conn, []*model.Product{&product})
 			infra.AddProducts(conn, products)
 		}
@@ -69,6 +71,7 @@ func CrawlTasty9(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 		c.Visit(pageurl)
 	}
 
-	log.Println(brand.Name + ": Finished")
+	log.Println(brand.Name + " NUM: " + strconv.Itoa(num))
+
 	wg.Done()
 }
