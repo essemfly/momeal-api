@@ -55,6 +55,7 @@ func CrawlMonokitchen(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand)
 			svgDiv := e.ChildAttr("a .img_box .thumbnail .centered svg filter", "id")
 			if len(svgDiv) > 0 {
 				product.Soldout = true
+				product.Imageurl = "http://mono-kitchen.co.kr" + e.ChildAttr("a .img_box .thumbnail .centered svg image", "href")
 			}
 			products := infra.UpdateProductsFieldExcept(conn, []*model.Product{&product})
 			infra.AddProducts(conn, products)
