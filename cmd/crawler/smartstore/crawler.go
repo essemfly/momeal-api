@@ -7,15 +7,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/lessbutter/mealkit/cmd/crawler/smartstore/src"
 	crawler "github.com/lessbutter/mealkit/cmd/crawler/utils"
-	"github.com/lessbutter/mealkit/cmd/smartstore/src"
 	infra "github.com/lessbutter/mealkit/src"
 	"github.com/lessbutter/mealkit/src/model"
-
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func CrawlSmartStore(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
+func CrawlSmartStore(wg *sync.WaitGroup, brand model.Brand) {
 	pageSize := 80
 	pageNum := 1
 	pageurl := AddUrlPageQuery(brand.CrawlingUrl, pageNum, pageSize)
@@ -29,8 +27,8 @@ func CrawlSmartStore(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) 
 	crawlResults := &src.SmartstoreResponseParser{}
 	json.NewDecoder(resp.Body).Decode(crawlResults)
 
-	categories := infra.ListCategories(conn)
-	products := MapCrawlResultsToModels(conn, brand, crawlResults.Products, categories)
+	categories := infra.ListCategories()
+	products := MapCrawlResultsToModels(brand, crawlResults.Products, categories)
 
 	for crawlResults.TotalCount > pageSize*pageNum {
 		pageNum += 1
@@ -43,11 +41,11 @@ func CrawlSmartStore(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) 
 		} else {
 			results := &src.SmartstoreResponseParser{}
 			json.NewDecoder(resp.Body).Decode(results)
-			products = append(products, MapCrawlResultsToModels(conn, brand, results.Products, categories)...)
+			products = append(products, MapCrawlResultsToModels(brand, results.Products, categories)...)
 		}
 	}
-	products = infra.UpdateProductsFieldExcept(conn, products)
-	infra.AddProducts(conn, products)
+	products = infra.UpdateProductsFieldExcept(products)
+	infra.AddProducts(products)
 
 	log.Println(brand.Name + " NUM: " + strconv.Itoa(len(products)))
 	wg.Done()
@@ -65,7 +63,7 @@ func CheckOutofStock(status string) bool {
 	return status == "OUTOFSTOCK"
 }
 
-func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []src.SmartstoreProductEntity, categories []model.Category) []*model.Product {
+func MapCrawlResultsToModels(brand model.Brand, products []src.SmartstoreProductEntity, categories []model.Category) []*model.Product {
 	var newProducts []*model.Product
 	for _, product := range products {
 		newProduct := model.Product{
@@ -76,7 +74,7 @@ func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []s
 			Brand:           &brand,
 			Producturl:      BuildProductUrl(brand.SmartstoreBrandName, product.NaverProductId),
 			Deliveryfee:     strconv.Itoa(product.DeliveryInfo.BaseFee),
-			Category:        crawler.InferProductCategoryFromName(conn, categories, product.Name),
+			Category:        crawler.InferProductCategoryFromName(categories, product.Name),
 			Purchasecount:   product.SaleAmount.CumulationSaleCount,
 			Reviewcount:     product.ReviewAmount.TotalReviewCount,
 			Reviewscore:     float64(product.ReviewAmount.AverageReviewScore),

@@ -9,6 +9,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/lessbutter/mealkit/config"
+	"github.com/lessbutter/mealkit/database"
 	"github.com/lessbutter/mealkit/src/generated"
 	"github.com/lessbutter/mealkit/src/resolver"
 )
@@ -21,6 +22,7 @@ func main() {
 		port = strconv.Itoa(conf.PORT)
 	}
 
+	database.InitDB(conf)
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolver.Resolver{}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))

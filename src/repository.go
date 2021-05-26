@@ -6,17 +6,16 @@ import (
 	"strconv"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"gopkg.in/mgo.v2/bson"
-
+	"github.com/lessbutter/mealkit/database"
 	"github.com/lessbutter/mealkit/src/model"
 	"github.com/lessbutter/mealkit/src/utils"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"gopkg.in/mgo.v2/bson"
 )
 
-func ListBrands(conn *mongo.Client) []model.Brand {
-	b := conn.Database("mealkit").Collection("brands")
+func ListBrands() []model.Brand {
+	b := database.Db.Collection("brands")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -30,8 +29,8 @@ func ListBrands(conn *mongo.Client) []model.Brand {
 	return brands
 }
 
-func ListCategories(conn *mongo.Client) []model.Category {
-	c := conn.Database("mealkit").Collection("categories")
+func ListCategories() []model.Category {
+	c := database.Db.Collection("categories")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -45,8 +44,8 @@ func ListCategories(conn *mongo.Client) []model.Category {
 	return categories
 }
 
-func FindBrandByName(conn *mongo.Client, name string) model.Brand {
-	b := conn.Database("mealkit").Collection("brands")
+func FindBrandByName(name string) model.Brand {
+	b := database.Db.Collection("brands")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -55,8 +54,8 @@ func FindBrandByName(conn *mongo.Client, name string) model.Brand {
 	return brand
 }
 
-func FindCategoryByLabel(conn *mongo.Client, label string) model.Category {
-	c := conn.Database("mealkit").Collection("categories")
+func FindCategoryByLabel(label string) model.Category {
+	c := database.Db.Collection("categories")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -65,8 +64,8 @@ func FindCategoryByLabel(conn *mongo.Client, label string) model.Category {
 	return category
 }
 
-func AddCategories(conn *mongo.Client, categories []model.Category) {
-	categoriesCollection := conn.Database("mealkit").Collection("categories")
+func AddCategories(categories []model.Category) {
+	categoriesCollection := database.Db.Collection("categories")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -79,8 +78,8 @@ func AddCategories(conn *mongo.Client, categories []model.Category) {
 	}
 }
 
-func AddBrands(conn *mongo.Client, brands []model.Brand) {
-	brandsCollection := conn.Database("mealkit").Collection("brands")
+func AddBrands(brands []model.Brand) {
+	brandsCollection := database.Db.Collection("brands")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -93,8 +92,8 @@ func AddBrands(conn *mongo.Client, brands []model.Brand) {
 	}
 }
 
-func AddProduct(conn *mongo.Client, product *model.Product) {
-	pc := conn.Database("mealkit").Collection("products")
+func AddProduct(product *model.Product) {
+	pc := database.Db.Collection("products")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	opts := options.Update().SetUpsert(true)
@@ -104,8 +103,8 @@ func AddProduct(conn *mongo.Client, product *model.Product) {
 	utils.CheckErr(err)
 }
 
-func UpdateProductsFieldExcept(conn *mongo.Client, products []*model.Product) []*model.Product {
-	pc := conn.Database("mealkit").Collection("products")
+func UpdateProductsFieldExcept(products []*model.Product) []*model.Product {
+	pc := database.Db.Collection("products")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -125,8 +124,8 @@ func UpdateProductsFieldExcept(conn *mongo.Client, products []*model.Product) []
 	return products
 }
 
-func AddProducts(conn *mongo.Client, products []*model.Product) {
-	pc := conn.Database("mealkit").Collection("products")
+func AddProducts(products []*model.Product) {
+	pc := database.Db.Collection("products")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	opts := options.Update().SetUpsert(true)
@@ -138,8 +137,8 @@ func AddProducts(conn *mongo.Client, products []*model.Product) {
 	}
 }
 
-func WriteCrawlingUpdateRecord(conn *mongo.Client) {
-	c := conn.Database("mealkit").Collection("crawling_records")
+func WriteCrawlingUpdateRecord() {
+	c := database.Db.Collection("crawling_records")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -154,7 +153,7 @@ func WriteCrawlingUpdateRecord(conn *mongo.Client) {
 		lastUpdatedDate = time.Now().UTC()
 	}
 
-	pc := conn.Database("mealkit").Collection("products")
+	pc := database.Db.Collection("products")
 	filter := bson.M{"isnew": true, "removed": false}
 	newProducts, err := pc.CountDocuments(ctx, filter)
 	utils.CheckErr(err)

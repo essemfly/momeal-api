@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/99designs/gqlgen v0.13.0
-	github.com/PuerkitoBio/goquery v1.6.1 // indirect
+	github.com/PuerkitoBio/goquery v1.6.1 
 	github.com/andybalholm/cascadia v1.2.0 // indirect
 	github.com/antchfx/htmlquery v1.2.3 // indirect
 	github.com/antchfx/xmlquery v1.3.6 // indirect
@@ -25,7 +25,7 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	go.mongodb.org/mongo-driver v1.5.2
 	golang.org/x/crypto v0.0.0-20210506145944-38f3c27a63bf // indirect
-	golang.org/x/net v0.0.0-20210505214959-0714010a04ed // indirect
+	golang.org/x/net v0.0.0-20210505214959-0714010a04ed 
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22

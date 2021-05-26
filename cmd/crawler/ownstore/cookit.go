@@ -14,7 +14,6 @@ import (
 	"github.com/lessbutter/mealkit/src/model"
 	"github.com/lessbutter/mealkit/src/utils"
 
-	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/net/html"
 )
 
@@ -29,10 +28,10 @@ type Node struct {
 	Doc   *html.Tokenizer
 }
 
-func CrawlCookit(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
+func CrawlCookit(wg *sync.WaitGroup, brand model.Brand) {
 	log.Println("Cookit gogosing")
 
-	categories := infra.ListCategories(conn)
+	categories := infra.ListCategories()
 	resp, ok := crawler.MakeRequest(brand.CrawlingUrl)
 	defer resp.Body.Close()
 	if !ok {
@@ -78,7 +77,7 @@ func CrawlCookit(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 			Discountedprice: discountedPriceInt,
 			Brand:           &brand,
 			Deliveryfee:     "",
-			Category:        crawler.InferProductCategoryFromName(conn, categories, name),
+			Category:        crawler.InferProductCategoryFromName(categories, name),
 			Reviewcount:     reviewcount,
 			Reviewscore:     reviewscoreFloat,
 			Mallname:        brand.CrawlFrom,
@@ -89,8 +88,8 @@ func CrawlCookit(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 			Updated:         time.Now(),
 		}
 
-		products := infra.UpdateProductsFieldExcept(conn, []*model.Product{&product})
-		infra.AddProducts(conn, products)
+		products := infra.UpdateProductsFieldExcept([]*model.Product{&product})
+		infra.AddProducts(products)
 	})
 
 	log.Println(brand.Name + " NUM: " + strconv.Itoa(num))

@@ -11,8 +11,6 @@ import (
 	crawler "github.com/lessbutter/mealkit/cmd/crawler/utils"
 	infra "github.com/lessbutter/mealkit/src"
 	"github.com/lessbutter/mealkit/src/model"
-
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type SimplyCookResponseParser struct {
@@ -46,7 +44,7 @@ type SimplyCookReviewEntity struct {
 	} `json:"data"`
 }
 
-func CrawlSimplycook(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
+func CrawlSimplycook(wg *sync.WaitGroup, brand model.Brand) {
 	resp, ok := crawler.MakeRequest(brand.CrawlingUrl)
 	defer resp.Body.Close()
 	if !ok {
@@ -56,14 +54,14 @@ func CrawlSimplycook(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) 
 	crawlResults := &SimplyCookResponseParser{}
 	json.NewDecoder(resp.Body).Decode(crawlResults)
 
-	categories := infra.ListCategories(conn)
+	categories := infra.ListCategories()
 	var newProducts []*model.Product
 	for _, field := range crawlResults.Data.Fields {
-		newProducts = append(newProducts, MapCrawlResultsToModels(conn, brand, field.Products, categories)...)
+		newProducts = append(newProducts, MapCrawlResultsToModels(brand, field.Products, categories)...)
 	}
 
-	newProducts = infra.UpdateProductsFieldExcept(conn, newProducts)
-	infra.AddProducts(conn, newProducts)
+	newProducts = infra.UpdateProductsFieldExcept(newProducts)
+	infra.AddProducts(newProducts)
 
 	log.Println(brand.Name + " NUM: " + strconv.Itoa(len(newProducts)))
 	wg.Done()
@@ -79,7 +77,7 @@ func BuildImageurl(imgUrl string) string {
 	return preUrl
 }
 
-func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []SimplyCookProductEntity, categories []model.Category) []*model.Product {
+func MapCrawlResultsToModels(brand model.Brand, products []SimplyCookProductEntity, categories []model.Category) []*model.Product {
 	var newProducts []*model.Product
 	for _, product := range products {
 		possibleQty, _ := strconv.Atoi(product.SellPosbQty)
@@ -103,7 +101,7 @@ func MapCrawlResultsToModels(conn *mongo.Client, brand model.Brand, products []S
 			Producturl:      "https://m.gsfresh.com/md/product_detail?itemId=" + product.ItemId + "&storId=" + product.StorId + "&supplFirmCd=" + product.SuppleFirmCd + "&mallId=" + product.MallId,
 			Deliveryfee:     "",
 			Brand:           &brand,
-			Category:        crawler.InferProductCategoryFromName(conn, categories, product.ItemName),
+			Category:        crawler.InferProductCategoryFromName(categories, product.ItemName),
 			Purchasecount:   0,
 			Reviewcount:     reviewCount,
 			Reviewscore:     reviewScore,

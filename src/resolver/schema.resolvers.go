@@ -5,11 +5,9 @@ package resolver
 
 import (
 	"context"
-	"fmt"
 	"time"
 
-	"github.com/lessbutter/mealkit/config"
-	"github.com/lessbutter/mealkit/src"
+	"github.com/lessbutter/mealkit/database"
 	"github.com/lessbutter/mealkit/src/generated"
 	"github.com/lessbutter/mealkit/src/model"
 	"github.com/lessbutter/mealkit/src/utils"
@@ -19,7 +17,7 @@ import (
 )
 
 func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput) ([]*model.Product, error) {
-	collection := conn.Database("mealkit").Collection("products")
+	collection := database.Db.Collection("products")
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
@@ -62,7 +60,7 @@ func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput
 }
 
 func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
-	collection := conn.Database("mealkit").Collection("categories")
+	collection := database.Db.Collection("categories")
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
@@ -82,7 +80,7 @@ func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, erro
 }
 
 func (r *queryResolver) Brands(ctx context.Context) ([]*model.Brand, error) {
-	collection := conn.Database("mealkit").Collection("brands")
+	collection := database.Db.Collection("brands")
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
@@ -105,15 +103,3 @@ func (r *queryResolver) Brands(ctx context.Context) ([]*model.Brand, error) {
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-var conn = src.MongoConn(config.GetConfiguration())
-
-func (r *queryResolver) Category(ctx context.Context, name model.Category) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
-}

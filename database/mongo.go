@@ -1,4 +1,4 @@
-package src
+package database
 
 import (
 	"context"
@@ -12,7 +12,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-func MongoConn(conf config.Configuration) (client *mongo.Client) {
+var Db *mongo.Database
+
+func InitDB(conf config.Configuration) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	credential := options.Credential{
@@ -25,5 +27,5 @@ func MongoConn(conf config.Configuration) (client *mongo.Client) {
 
 	utils.CheckErr(err)
 	utils.CheckErr(client.Ping(ctx, readpref.Primary()))
-	return client
+	Db = client.Database("mealkit")
 }

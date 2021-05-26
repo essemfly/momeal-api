@@ -7,8 +7,6 @@ import (
 	"sync"
 	"time"
 
-	"go.mongodb.org/mongo-driver/mongo"
-
 	"github.com/gocolly/colly"
 	crawler "github.com/lessbutter/mealkit/cmd/crawler/utils"
 	infra "github.com/lessbutter/mealkit/src"
@@ -16,8 +14,8 @@ import (
 	"github.com/lessbutter/mealkit/src/utils"
 )
 
-func CrawlPeacock(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
-	categories := infra.ListCategories(conn)
+func CrawlPeacock(wg *sync.WaitGroup, brand model.Brand) {
+	categories := infra.ListCategories()
 	url := "http://emart.ssg.com/specialStore/ssgpeacock/ajaxSubItemList.ssg?aplSiteNo=6001&pageSize=100&ctgId=6000073847"
 	c := colly.NewCollector(
 		colly.AllowedDomains("emart.ssg.com"),
@@ -34,7 +32,7 @@ func CrawlPeacock(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 		product.Discountedprice = 0
 		product.Brand = &brand
 		product.Deliveryfee = ""
-		product.Category = crawler.InferProductCategoryFromName(conn, categories, product.Name)
+		product.Category = crawler.InferProductCategoryFromName(categories, product.Name)
 		product.Purchasecount = 0
 		product.Reviewcount = utils.ParsePriceString(e.ChildText(".rate_tx em"))
 		reviewscore := strings.Replace(e.ChildText(".rate_bg .blind"), "별점 ", "", 1)
@@ -54,8 +52,8 @@ func CrawlPeacock(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
 
 		if product.Name != "" {
 			num += 1
-			products := infra.UpdateProductsFieldExcept(conn, []*model.Product{&product})
-			infra.AddProducts(conn, products)
+			products := infra.UpdateProductsFieldExcept([]*model.Product{&product})
+			infra.AddProducts(products)
 		}
 	})
 

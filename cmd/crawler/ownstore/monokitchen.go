@@ -10,15 +10,13 @@ import (
 	crawler "github.com/lessbutter/mealkit/cmd/crawler/utils"
 	infra "github.com/lessbutter/mealkit/src"
 
-	"go.mongodb.org/mongo-driver/mongo"
-
 	"github.com/gocolly/colly"
 	"github.com/lessbutter/mealkit/src/model"
 	"github.com/lessbutter/mealkit/src/utils"
 )
 
-func CrawlMonokitchen(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand) {
-	categories := infra.ListCategories(conn)
+func CrawlMonokitchen(wg *sync.WaitGroup, brand model.Brand) {
+	categories := infra.ListCategories()
 
 	url := "http://mono-kitchen.co.kr/shop/shopbrand.html?xcode=015"
 	c := colly.NewCollector(
@@ -41,7 +39,7 @@ func CrawlMonokitchen(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand)
 			product.Imageurl = "http://mono-kitchen.co.kr" + e.ChildAttr("a .img_box .thumbnail .centered img", "src")
 			product.Brand = &brand
 			product.Deliveryfee = ""
-			product.Category = crawler.InferProductCategoryFromName(conn, categories, product.Name)
+			product.Category = crawler.InferProductCategoryFromName(categories, product.Name)
 			product.Purchasecount = 0
 			product.Reviewcount = 0
 			product.Reviewscore = 0
@@ -57,8 +55,8 @@ func CrawlMonokitchen(conn *mongo.Client, wg *sync.WaitGroup, brand model.Brand)
 				product.Soldout = true
 				product.Imageurl = "http://mono-kitchen.co.kr" + e.ChildAttr("a .img_box .thumbnail .centered svg image", "href")
 			}
-			products := infra.UpdateProductsFieldExcept(conn, []*model.Product{&product})
-			infra.AddProducts(conn, products)
+			products := infra.UpdateProductsFieldExcept([]*model.Product{&product})
+			infra.AddProducts(products)
 		}
 	})
 
