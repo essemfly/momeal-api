@@ -29,8 +29,6 @@ type Node struct {
 }
 
 func CrawlCookit(wg *sync.WaitGroup, brand model.Brand) {
-	log.Println("Cookit gogosing")
-
 	categories := infra.ListCategories()
 	resp, ok := crawler.MakeRequest(brand.CrawlingUrl)
 	defer resp.Body.Close()
