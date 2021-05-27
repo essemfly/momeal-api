@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	crawler "github.com/lessbutter/mealkit/cmd/crawler/utils"
-	infra "github.com/lessbutter/mealkit/src"
-	"github.com/lessbutter/mealkit/src/model"
+	crawler "github.com/lessbutter/momeal-api/cmd/crawler/utils"
+	infra "github.com/lessbutter/momeal-api/src"
+	"github.com/lessbutter/momeal-api/src/model"
 )
 
 type SimplyCookResponseParser struct {

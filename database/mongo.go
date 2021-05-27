@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/lessbutter/mealkit/config"
-	"github.com/lessbutter/mealkit/src/utils"
+	"github.com/lessbutter/momeal-api/config"
+	"github.com/lessbutter/momeal-api/src/utils"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

@@ -7,12 +7,12 @@ import (
 	"sync"
 	"time"
 
-	crawler "github.com/lessbutter/mealkit/cmd/crawler/utils"
-	infra "github.com/lessbutter/mealkit/src"
+	crawler "github.com/lessbutter/momeal-api/cmd/crawler/utils"
+	infra "github.com/lessbutter/momeal-api/src"
 
 	"github.com/gocolly/colly"
-	"github.com/lessbutter/mealkit/src/model"
-	"github.com/lessbutter/mealkit/src/utils"
+	"github.com/lessbutter/momeal-api/src/model"
+	"github.com/lessbutter/momeal-api/src/utils"
 )
 
 func CrawlMonokitchen(wg *sync.WaitGroup, brand model.Brand) {

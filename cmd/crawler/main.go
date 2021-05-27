@@ -3,12 +3,12 @@ package main
 import (
 	"sync"
 
-	"github.com/lessbutter/mealkit/cmd/crawler/ownstore"
-	"github.com/lessbutter/mealkit/cmd/crawler/smartstore"
-	"github.com/lessbutter/mealkit/config"
-	"github.com/lessbutter/mealkit/database"
-	infra "github.com/lessbutter/mealkit/src"
-	"github.com/lessbutter/mealkit/src/model"
+	"github.com/lessbutter/momeal-api/cmd/crawler/ownstore"
+	"github.com/lessbutter/momeal-api/cmd/crawler/smartstore"
+	"github.com/lessbutter/momeal-api/config"
+	"github.com/lessbutter/momeal-api/database"
+	infra "github.com/lessbutter/momeal-api/src"
+	"github.com/lessbutter/momeal-api/src/model"
 )
 
 func main() {

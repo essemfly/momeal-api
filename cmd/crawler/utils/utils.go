@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"strings"
 
-	infra "github.com/lessbutter/mealkit/src"
+	infra "github.com/lessbutter/momeal-api/src"
 
-	"github.com/lessbutter/mealkit/src/model"
-	"github.com/lessbutter/mealkit/src/utils"
+	"github.com/lessbutter/momeal-api/src/model"
+	"github.com/lessbutter/momeal-api/src/utils"
 )
 
 func InferProductCategoryFromName(categories []model.Category, name string) *model.Category {

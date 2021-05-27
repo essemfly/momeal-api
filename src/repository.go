@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/lessbutter/mealkit/database"
-	"github.com/lessbutter/mealkit/src/model"
-	"github.com/lessbutter/mealkit/src/utils"
+	"github.com/lessbutter/momeal-api/database"
+	"github.com/lessbutter/momeal-api/src/model"
+	"github.com/lessbutter/momeal-api/src/utils"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"

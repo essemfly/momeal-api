@@ -4,8 +4,8 @@ import (
 	"log"
 	"strconv"
 
-	infra "github.com/lessbutter/mealkit/src"
-	"github.com/lessbutter/mealkit/src/model"
+	infra "github.com/lessbutter/momeal-api/src"
+	"github.com/lessbutter/momeal-api/src/model"
 )
 
 func AddBrands() {

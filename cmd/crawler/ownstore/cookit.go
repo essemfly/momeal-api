@@ -9,10 +9,10 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	crawler "github.com/lessbutter/mealkit/cmd/crawler/utils"
-	infra "github.com/lessbutter/mealkit/src"
-	"github.com/lessbutter/mealkit/src/model"
-	"github.com/lessbutter/mealkit/src/utils"
+	crawler "github.com/lessbutter/momeal-api/cmd/crawler/utils"
+	infra "github.com/lessbutter/momeal-api/src"
+	"github.com/lessbutter/momeal-api/src/model"
+	"github.com/lessbutter/momeal-api/src/utils"
 
 	"golang.org/x/net/html"
 )

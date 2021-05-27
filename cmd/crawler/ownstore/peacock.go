@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"github.com/gocolly/colly"
-	crawler "github.com/lessbutter/mealkit/cmd/crawler/utils"
-	infra "github.com/lessbutter/mealkit/src"
-	"github.com/lessbutter/mealkit/src/model"
-	"github.com/lessbutter/mealkit/src/utils"
+	crawler "github.com/lessbutter/momeal-api/cmd/crawler/utils"
+	infra "github.com/lessbutter/momeal-api/src"
+	"github.com/lessbutter/momeal-api/src/model"
+	"github.com/lessbutter/momeal-api/src/utils"
 )
 
 func CrawlPeacock(wg *sync.WaitGroup, brand model.Brand) {

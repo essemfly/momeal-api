@@ -13,7 +13,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/lessbutter/mealkit/src/model"
+	"github.com/lessbutter/momeal-api/src/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -495,7 +495,7 @@ func (ec *executionContext) field_Query_products_args(ctx context.Context, rawAr
 	var arg0 model.ProductsInput
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalNProductsInput2githubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐProductsInput(ctx, tmp)
+		arg0, err = ec.unmarshalNProductsInput2githubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐProductsInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -819,7 +819,7 @@ func (ec *executionContext) _Category_name(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(model.CategoryEnum)
 	fc.Result = res
-	return ec.marshalNCategoryEnum2githubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategoryEnum(ctx, field.Selections, res)
+	return ec.marshalNCategoryEnum2githubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryEnum(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Category_categoryimageurl(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
@@ -1099,7 +1099,7 @@ func (ec *executionContext) _Product_brand(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.Brand)
 	fc.Result = res
-	return ec.marshalNBrand2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐBrand(ctx, field.Selections, res)
+	return ec.marshalNBrand2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐBrand(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Product_producturl(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
@@ -1204,7 +1204,7 @@ func (ec *executionContext) _Product_category(ctx context.Context, field graphql
 	}
 	res := resTmp.(*model.Category)
 	fc.Result = res
-	return ec.marshalNCategory2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategory(ctx, field.Selections, res)
+	return ec.marshalNCategory2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Product_purchasecount(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
@@ -1561,7 +1561,7 @@ func (ec *executionContext) _Query_products(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*model.Product)
 	fc.Result = res
-	return ec.marshalNProduct2ᚕᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐProductᚄ(ctx, field.Selections, res)
+	return ec.marshalNProduct2ᚕᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐProductᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_categories(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1596,7 +1596,7 @@ func (ec *executionContext) _Query_categories(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.Category)
 	fc.Result = res
-	return ec.marshalNCategory2ᚕᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategoryᚄ(ctx, field.Selections, res)
+	return ec.marshalNCategory2ᚕᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_brands(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1631,7 +1631,7 @@ func (ec *executionContext) _Query_brands(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.([]*model.Brand)
 	fc.Result = res
-	return ec.marshalNBrand2ᚕᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐBrandᚄ(ctx, field.Selections, res)
+	return ec.marshalNBrand2ᚕᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐBrandᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2818,7 +2818,7 @@ func (ec *executionContext) unmarshalInputProductsInput(ctx context.Context, obj
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("category"))
-			it.Category, err = ec.unmarshalOCategoryEnum2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategoryEnum(ctx, v)
+			it.Category, err = ec.unmarshalOCategoryEnum2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryEnum(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3390,7 +3390,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNBrand2ᚕᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐBrandᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Brand) graphql.Marshaler {
+func (ec *executionContext) marshalNBrand2ᚕᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐBrandᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Brand) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3414,7 +3414,7 @@ func (ec *executionContext) marshalNBrand2ᚕᚖgithubᚗcomᚋlessbutterᚋmeal
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNBrand2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐBrand(ctx, sel, v[i])
+			ret[i] = ec.marshalNBrand2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐBrand(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3427,7 +3427,7 @@ func (ec *executionContext) marshalNBrand2ᚕᚖgithubᚗcomᚋlessbutterᚋmeal
 	return ret
 }
 
-func (ec *executionContext) marshalNBrand2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐBrand(ctx context.Context, sel ast.SelectionSet, v *model.Brand) graphql.Marshaler {
+func (ec *executionContext) marshalNBrand2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐBrand(ctx context.Context, sel ast.SelectionSet, v *model.Brand) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3437,7 +3437,7 @@ func (ec *executionContext) marshalNBrand2ᚖgithubᚗcomᚋlessbutterᚋmealkit
 	return ec._Brand(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCategory2ᚕᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategoryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Category) graphql.Marshaler {
+func (ec *executionContext) marshalNCategory2ᚕᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Category) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3461,7 +3461,7 @@ func (ec *executionContext) marshalNCategory2ᚕᚖgithubᚗcomᚋlessbutterᚋm
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCategory2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategory(ctx, sel, v[i])
+			ret[i] = ec.marshalNCategory2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategory(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3474,7 +3474,7 @@ func (ec *executionContext) marshalNCategory2ᚕᚖgithubᚗcomᚋlessbutterᚋm
 	return ret
 }
 
-func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v *model.Category) graphql.Marshaler {
+func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v *model.Category) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3484,13 +3484,13 @@ func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋlessbutterᚋmeal
 	return ec._Category(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNCategoryEnum2githubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, v interface{}) (model.CategoryEnum, error) {
+func (ec *executionContext) unmarshalNCategoryEnum2githubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, v interface{}) (model.CategoryEnum, error) {
 	var res model.CategoryEnum
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCategoryEnum2githubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, sel ast.SelectionSet, v model.CategoryEnum) graphql.Marshaler {
+func (ec *executionContext) marshalNCategoryEnum2githubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, sel ast.SelectionSet, v model.CategoryEnum) graphql.Marshaler {
 	return v
 }
 
@@ -3539,7 +3539,7 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNProduct2ᚕᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐProductᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Product) graphql.Marshaler {
+func (ec *executionContext) marshalNProduct2ᚕᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐProductᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Product) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3563,7 +3563,7 @@ func (ec *executionContext) marshalNProduct2ᚕᚖgithubᚗcomᚋlessbutterᚋme
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNProduct2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐProduct(ctx, sel, v[i])
+			ret[i] = ec.marshalNProduct2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐProduct(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3576,7 +3576,7 @@ func (ec *executionContext) marshalNProduct2ᚕᚖgithubᚗcomᚋlessbutterᚋme
 	return ret
 }
 
-func (ec *executionContext) marshalNProduct2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐProduct(ctx context.Context, sel ast.SelectionSet, v *model.Product) graphql.Marshaler {
+func (ec *executionContext) marshalNProduct2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐProduct(ctx context.Context, sel ast.SelectionSet, v *model.Product) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3586,7 +3586,7 @@ func (ec *executionContext) marshalNProduct2ᚖgithubᚗcomᚋlessbutterᚋmealk
 	return ec._Product(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNProductsInput2githubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐProductsInput(ctx context.Context, v interface{}) (model.ProductsInput, error) {
+func (ec *executionContext) unmarshalNProductsInput2githubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐProductsInput(ctx context.Context, v interface{}) (model.ProductsInput, error) {
 	res, err := ec.unmarshalInputProductsInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -3874,7 +3874,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return graphql.MarshalBoolean(*v)
 }
 
-func (ec *executionContext) unmarshalOCategoryEnum2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, v interface{}) (*model.CategoryEnum, error) {
+func (ec *executionContext) unmarshalOCategoryEnum2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, v interface{}) (*model.CategoryEnum, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -3883,7 +3883,7 @@ func (ec *executionContext) unmarshalOCategoryEnum2ᚖgithubᚗcomᚋlessbutter�
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOCategoryEnum2ᚖgithubᚗcomᚋlessbutterᚋmealkitᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, sel ast.SelectionSet, v *model.CategoryEnum) graphql.Marshaler {
+func (ec *executionContext) marshalOCategoryEnum2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, sel ast.SelectionSet, v *model.CategoryEnum) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

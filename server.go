@@ -8,10 +8,10 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/lessbutter/mealkit/config"
-	"github.com/lessbutter/mealkit/database"
-	"github.com/lessbutter/mealkit/src/generated"
-	"github.com/lessbutter/mealkit/src/resolver"
+	"github.com/lessbutter/momeal-api/config"
+	"github.com/lessbutter/momeal-api/database"
+	"github.com/lessbutter/momeal-api/src/generated"
+	"github.com/lessbutter/momeal-api/src/resolver"
 )
 
 func main() {

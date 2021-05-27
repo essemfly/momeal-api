@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/lessbutter/mealkit/cmd/seeds/seeds"
-	"github.com/lessbutter/mealkit/config"
-	"github.com/lessbutter/mealkit/database"
+	"github.com/lessbutter/momeal-api/cmd/seeds/seeds"
+	"github.com/lessbutter/momeal-api/config"
+	"github.com/lessbutter/momeal-api/database"
 )
 
 func main() {
