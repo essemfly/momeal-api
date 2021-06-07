@@ -5,97 +5,38 @@ package resolver
 
 import (
 	"context"
-	"time"
 
-	"github.com/lessbutter/momeal-api/database"
+	"github.com/lessbutter/momeal-api/src"
 	"github.com/lessbutter/momeal-api/src/generated"
 	"github.com/lessbutter/momeal-api/src/model"
-	"github.com/lessbutter/momeal-api/src/utils"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func (r *queryResolver) Products(ctx context.Context, filter model.ProductsInput) ([]*model.Product, error) {
-	collection := database.Db.Collection("products")
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-	defer cancel()
-
-	dbfilter := bson.M{
-		"$or": bson.A{
-			bson.M{"removed": false},
-			bson.M{"removed": bson.M{"$exists": false}},
-		},
-	}
+	categoryQuery := ""
+	brandQuery := ""
+	searchQuery := ""
 
 	if filter.Category != nil {
-		dbfilter["category.name"] = filter.Category
+		categoryQuery = *filter.Category
 	} else if filter.Brand != nil {
-		dbfilter["brand._id"] = *filter.Brand
+		brandQuery = *filter.Brand
 	}
 
 	if filter.Search != nil {
-		dbfilter["name"] = primitive.Regex{
-			Pattern: *filter.Search,
-			Options: "i",
-		}
+		searchQuery = *filter.Search
 	}
 
-	options := options.Find()
-	options.SetSort(bson.D{{Key: "reviewscore", Value: -1}, {Key: "soldout", Value: 1}, {Key: "_id", Value: -1}})
-	options.SetLimit(int64(filter.Limit))
-	options.SetSkip(int64(filter.Offset))
-
-	cur, err := collection.Find(ctx, dbfilter, options)
-	utils.CheckErr(err)
-
-	var products []*model.Product
-	for cur.Next(ctx) {
-		var product *model.Product
-		err := cur.Decode(&product)
-		utils.CheckErr(err)
-		products = append(products, product)
-	}
+	products := src.ListProducts(brandQuery, categoryQuery, searchQuery, filter.Limit, filter.Offset)
 	return products, nil
 }
 
 func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
-	collection := database.Db.Collection("categories")
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-	defer cancel()
-
-	options := options.Find()
-	options.SetSort(bson.M{"order": 1})
-
-	cur, _ := collection.Find(ctx, bson.M{}, options)
-
-	var categories []*model.Category
-	for cur.Next(ctx) {
-		var category *model.Category
-		err := cur.Decode(&category)
-		utils.CheckErr(err)
-		categories = append(categories, category)
-	}
+	categories := src.ListCategories()
 	return categories, nil
 }
 
 func (r *queryResolver) Brands(ctx context.Context) ([]*model.Brand, error) {
-	collection := database.Db.Collection("brands")
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-	defer cancel()
-
-	options := options.Find()
-	options.SetSort(bson.M{"order": 1})
-
-	cur, _ := collection.Find(ctx, bson.M{}, options)
-
-	var brands []*model.Brand
-	for cur.Next(ctx) {
-		var brand *model.Brand
-		err := cur.Decode(&brand)
-		utils.CheckErr(err)
-		brands = append(brands, brand)
-	}
+	brands := src.ListBrands()
 	return brands, nil
 }
 

@@ -16,8 +16,6 @@ import (
 )
 
 func CrawlTasty9(wg *sync.WaitGroup, brand model.Brand) {
-	categories := infra.ListCategories()
-
 	url := "https://tasty9.com/product/list.html?cate_no=95"
 	c := colly.NewCollector(
 		colly.AllowedDomains("tasty9.com", "www.tasty9.com"),
@@ -47,7 +45,7 @@ func CrawlTasty9(wg *sync.WaitGroup, brand model.Brand) {
 			}
 			product.Brand = &brand
 			product.Deliveryfee = ""
-			product.Category = crawler.InferProductCategoryFromName(categories, product.Name)
+			product.Category = crawler.InferProductCategoryFromName(product.Name)
 			product.Purchasecount = 0
 			product.Reviewcount = 0
 			product.Reviewscore = 0

@@ -1,44 +1,8 @@
-enum CategoryEnum {
-  Hamultang
-  Yukgyejang
-  Maratang
-  Duonjangzzigye
-  Kimchizzigye
-  Gambas
-  Etcjeongol
-  Steak
-  Gogi
-  Umooktang
-  Churtang
-  Bibbimbap
-  Gobchangjeongol
-  Chunggukjang
-  Budaezzigye
-  Etc
-  Altang
-  Myun
-  Millefeuille
-  Uguzytang
-  Bunsik
-  Pasta
-  Sundubuzzigye
-  Kongbeasyzzigye
-  Bokumzzim
-  Jjagle
-  Shabshab
-  Bulgogijeongol
-  Dakkalbi
-  Bokum
-  Zzim
-  Donkkas
-}
-
 scalar Time
 
 type Category {
   ID: ID!
   label: String!
-  name: CategoryEnum!
   categoryimageurl: String!
   onmain: Boolean!
 }
@@ -75,7 +39,7 @@ type Brand {
 input ProductsInput {
   offset: Int!
   limit: Int!
-  category: CategoryEnum
+  category: String
   brand: String
   search: String
 }

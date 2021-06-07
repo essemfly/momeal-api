@@ -29,7 +29,6 @@ type Node struct {
 }
 
 func CrawlCookit(wg *sync.WaitGroup, brand model.Brand) {
-	categories := infra.ListCategories()
 	resp, ok := crawler.MakeRequest(brand.CrawlingUrl)
 	defer resp.Body.Close()
 	if !ok {
@@ -75,7 +74,7 @@ func CrawlCookit(wg *sync.WaitGroup, brand model.Brand) {
 			Discountedprice: discountedPriceInt,
 			Brand:           &brand,
 			Deliveryfee:     "",
-			Category:        crawler.InferProductCategoryFromName(categories, name),
+			Category:        crawler.InferProductCategoryFromName(name),
 			Reviewcount:     reviewcount,
 			Reviewscore:     reviewscoreFloat,
 			Mallname:        brand.CrawlFrom,

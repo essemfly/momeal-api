@@ -9,35 +9,41 @@ import (
 	"github.com/lessbutter/momeal-api/database"
 	"github.com/lessbutter/momeal-api/src/model"
 	"github.com/lessbutter/momeal-api/src/utils"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"gopkg.in/mgo.v2/bson"
 )
 
-func ListBrands() []model.Brand {
+func ListBrands() []*model.Brand {
 	b := database.Db.Collection("brands")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	cursor, err := b.Find(ctx, bson.M{})
+	options := options.Find()
+	options.SetSort(bson.M{"order": 1})
+
+	cursor, err := b.Find(ctx, bson.M{}, options)
 	utils.CheckErr(err)
 
-	var brands []model.Brand
+	var brands []*model.Brand
 	err = cursor.All(ctx, &brands)
 	utils.CheckErr(err)
 
 	return brands
 }
 
-func ListCategories() []model.Category {
+func ListCategories() []*model.Category {
 	c := database.Db.Collection("categories")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	cursor, err := c.Find(ctx, bson.M{})
+	options := options.Find()
+	options.SetSort(bson.M{"order": 1})
+
+	cursor, err := c.Find(ctx, bson.M{}, options)
 	utils.CheckErr(err)
 
-	var categories []model.Category
+	var categories []*model.Category
 	err = cursor.All(ctx, &categories)
 	utils.CheckErr(err)
 
@@ -72,7 +78,7 @@ func AddCategories(categories []model.Category) {
 	opts := options.Update().SetUpsert(true)
 
 	for _, cat := range categories {
-		filter := bson.M{"name": cat.Name}
+		filter := bson.M{"label": cat.Label}
 		_, err := categoriesCollection.UpdateOne(ctx, filter, bson.M{"$set": cat}, opts)
 		utils.CheckErr(err)
 	}
@@ -135,6 +141,49 @@ func AddProducts(products []*model.Product) {
 		_, err := pc.UpdateOne(ctx, filter, bson.M{"$set": &product}, opts)
 		utils.CheckErr(err)
 	}
+}
+
+func ListProducts(brand, category, search string, limit, offset int) []*model.Product {
+	collection := database.Db.Collection("products")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	dbfilter := bson.M{
+		"$or": bson.A{
+			bson.M{"removed": false},
+			bson.M{"removed": bson.M{"$exists": false}},
+		},
+	}
+
+	if category != "" {
+		dbfilter["category._id"] = category
+	} else if brand != "" {
+		dbfilter["brand._id"] = brand
+	}
+
+	if search != "" {
+		dbfilter["name"] = primitive.Regex{
+			Pattern: search,
+			Options: "i",
+		}
+	}
+
+	options := options.Find()
+	options.SetSort(bson.D{{Key: "reviewscore", Value: -1}, {Key: "soldout", Value: 1}, {Key: "_id", Value: -1}})
+	options.SetLimit(int64(limit))
+	options.SetSkip(int64(offset))
+
+	cur, err := collection.Find(ctx, dbfilter, options)
+	utils.CheckErr(err)
+
+	var products []*model.Product
+	for cur.Next(ctx) {
+		var product *model.Product
+		err := cur.Decode(&product)
+		utils.CheckErr(err)
+		products = append(products, product)
+	}
+	return products
 }
 
 func WriteCrawlingUpdateRecord() {

@@ -54,10 +54,9 @@ func CrawlSimplycook(wg *sync.WaitGroup, brand model.Brand) {
 	crawlResults := &SimplyCookResponseParser{}
 	json.NewDecoder(resp.Body).Decode(crawlResults)
 
-	categories := infra.ListCategories()
 	var newProducts []*model.Product
 	for _, field := range crawlResults.Data.Fields {
-		newProducts = append(newProducts, MapCrawlResultsToModels(brand, field.Products, categories)...)
+		newProducts = append(newProducts, MapCrawlResultsToModels(brand, field.Products)...)
 	}
 
 	newProducts = infra.UpdateProductsFieldExcept(newProducts)
@@ -77,7 +76,7 @@ func BuildImageurl(imgUrl string) string {
 	return preUrl
 }
 
-func MapCrawlResultsToModels(brand model.Brand, products []SimplyCookProductEntity, categories []model.Category) []*model.Product {
+func MapCrawlResultsToModels(brand model.Brand, products []SimplyCookProductEntity) []*model.Product {
 	var newProducts []*model.Product
 	for _, product := range products {
 		possibleQty, _ := strconv.Atoi(product.SellPosbQty)
@@ -101,7 +100,7 @@ func MapCrawlResultsToModels(brand model.Brand, products []SimplyCookProductEnti
 			Producturl:      "https://m.gsfresh.com/md/product_detail?itemId=" + product.ItemId + "&storId=" + product.StorId + "&supplFirmCd=" + product.SuppleFirmCd + "&mallId=" + product.MallId,
 			Deliveryfee:     "",
 			Brand:           &brand,
-			Category:        crawler.InferProductCategoryFromName(categories, product.ItemName),
+			Category:        crawler.InferProductCategoryFromName(product.ItemName),
 			Purchasecount:   0,
 			Reviewcount:     reviewCount,
 			Reviewscore:     reviewScore,

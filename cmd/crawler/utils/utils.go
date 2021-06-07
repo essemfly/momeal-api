@@ -12,7 +12,7 @@ import (
 	"github.com/lessbutter/momeal-api/src/utils"
 )
 
-func InferProductCategoryFromName(categories []model.Category, name string) *model.Category {
+func InferProductCategoryFromName(name string) *model.Category {
 	category_mapper := map[string]string{
 		"지리탕":    "해물탕",
 		"연포탕":    "해물탕",

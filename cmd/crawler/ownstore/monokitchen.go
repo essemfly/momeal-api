@@ -16,8 +16,6 @@ import (
 )
 
 func CrawlMonokitchen(wg *sync.WaitGroup, brand model.Brand) {
-	categories := infra.ListCategories()
-
 	url := "http://mono-kitchen.co.kr/shop/shopbrand.html?xcode=015"
 	c := colly.NewCollector(
 		colly.AllowedDomains("mono-kitchen.co.kr"),
@@ -39,7 +37,7 @@ func CrawlMonokitchen(wg *sync.WaitGroup, brand model.Brand) {
 			product.Imageurl = "http://mono-kitchen.co.kr" + e.ChildAttr("a .img_box .thumbnail .centered img", "src")
 			product.Brand = &brand
 			product.Deliveryfee = ""
-			product.Category = crawler.InferProductCategoryFromName(categories, product.Name)
+			product.Category = crawler.InferProductCategoryFromName(product.Name)
 			product.Purchasecount = 0
 			product.Reviewcount = 0
 			product.Reviewscore = 0

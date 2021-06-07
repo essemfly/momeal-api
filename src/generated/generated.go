@@ -55,7 +55,6 @@ type ComplexityRoot struct {
 		Categoryimageurl func(childComplexity int) int
 		ID               func(childComplexity int) int
 		Label            func(childComplexity int) int
-		Name             func(childComplexity int) int
 		Onmain           func(childComplexity int) int
 	}
 
@@ -163,13 +162,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Category.Label(childComplexity), true
-
-	case "Category.name":
-		if e.complexity.Category.Name == nil {
-			break
-		}
-
-		return e.complexity.Category.Name(childComplexity), true
 
 	case "Category.onmain":
 		if e.complexity.Category.Onmain == nil {
@@ -380,47 +372,11 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema.graphqls", Input: `enum CategoryEnum {
-  Hamultang
-  Yukgyejang
-  Maratang
-  Duonjangzzigye
-  Kimchizzigye
-  Gambas
-  Etcjeongol
-  Steak
-  Gogi
-  Umooktang
-  Churtang
-  Bibbimbap
-  Gobchangjeongol
-  Chunggukjang
-  Budaezzigye
-  Etc
-  Altang
-  Myun
-  Millefeuille
-  Uguzytang
-  Bunsik
-  Pasta
-  Sundubuzzigye
-  Kongbeasyzzigye
-  Bokumzzim
-  Jjagle
-  Shabshab
-  Bulgogijeongol
-  Dakkalbi
-  Bokum
-  Zzim
-  Donkkas
-}
-
-scalar Time
+	{Name: "graph/schema.graphqls", Input: `scalar Time
 
 type Category {
   ID: ID!
   label: String!
-  name: CategoryEnum!
   categoryimageurl: String!
   onmain: Boolean!
 }
@@ -457,7 +413,7 @@ type Brand {
 input ProductsInput {
   offset: Int!
   limit: Int!
-  category: CategoryEnum
+  category: String
   brand: String
   search: String
 }
@@ -785,41 +741,6 @@ func (ec *executionContext) _Category_label(ctx context.Context, field graphql.C
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Category_name(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Category",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Name, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(model.CategoryEnum)
-	fc.Result = res
-	return ec.marshalNCategoryEnum2githubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryEnum(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Category_categoryimageurl(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
@@ -2818,7 +2739,7 @@ func (ec *executionContext) unmarshalInputProductsInput(ctx context.Context, obj
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("category"))
-			it.Category, err = ec.unmarshalOCategoryEnum2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryEnum(ctx, v)
+			it.Category, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2917,11 +2838,6 @@ func (ec *executionContext) _Category(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "label":
 			out.Values[i] = ec._Category_label(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "name":
-			out.Values[i] = ec._Category_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -3484,16 +3400,6 @@ func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋlessbutterᚋmome
 	return ec._Category(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNCategoryEnum2githubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, v interface{}) (model.CategoryEnum, error) {
-	var res model.CategoryEnum
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNCategoryEnum2githubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, sel ast.SelectionSet, v model.CategoryEnum) graphql.Marshaler {
-	return v
-}
-
 func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v interface{}) (float64, error) {
 	res, err := graphql.UnmarshalFloat(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -3872,22 +3778,6 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	return graphql.MarshalBoolean(*v)
-}
-
-func (ec *executionContext) unmarshalOCategoryEnum2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, v interface{}) (*model.CategoryEnum, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(model.CategoryEnum)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOCategoryEnum2ᚖgithubᚗcomᚋlessbutterᚋmomealᚑapiᚋsrcᚋmodelᚐCategoryEnum(ctx context.Context, sel ast.SelectionSet, v *model.CategoryEnum) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {

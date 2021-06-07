@@ -27,8 +27,7 @@ func CrawlSmartStore(wg *sync.WaitGroup, brand model.Brand) {
 	crawlResults := &src.SmartstoreResponseParser{}
 	json.NewDecoder(resp.Body).Decode(crawlResults)
 
-	categories := infra.ListCategories()
-	products := MapCrawlResultsToModels(brand, crawlResults.Products, categories)
+	products := MapCrawlResultsToModels(brand, crawlResults.Products)
 
 	for crawlResults.TotalCount > pageSize*pageNum {
 		pageNum += 1
@@ -41,7 +40,7 @@ func CrawlSmartStore(wg *sync.WaitGroup, brand model.Brand) {
 		} else {
 			results := &src.SmartstoreResponseParser{}
 			json.NewDecoder(resp.Body).Decode(results)
-			products = append(products, MapCrawlResultsToModels(brand, results.Products, categories)...)
+			products = append(products, MapCrawlResultsToModels(brand, results.Products)...)
 		}
 	}
 	products = infra.UpdateProductsFieldExcept(products)
@@ -63,7 +62,7 @@ func CheckOutofStock(status string) bool {
 	return status == "OUTOFSTOCK"
 }
 
-func MapCrawlResultsToModels(brand model.Brand, products []src.SmartstoreProductEntity, categories []model.Category) []*model.Product {
+func MapCrawlResultsToModels(brand model.Brand, products []src.SmartstoreProductEntity) []*model.Product {
 	var newProducts []*model.Product
 	for _, product := range products {
 		newProduct := model.Product{
@@ -74,7 +73,7 @@ func MapCrawlResultsToModels(brand model.Brand, products []src.SmartstoreProduct
 			Brand:           &brand,
 			Producturl:      BuildProductUrl(brand.SmartstoreBrandName, product.NaverProductId),
 			Deliveryfee:     strconv.Itoa(product.DeliveryInfo.BaseFee),
-			Category:        crawler.InferProductCategoryFromName(categories, product.Name),
+			Category:        crawler.InferProductCategoryFromName(product.Name),
 			Purchasecount:   product.SaleAmount.CumulationSaleCount,
 			Reviewcount:     product.ReviewAmount.TotalReviewCount,
 			Reviewscore:     float64(product.ReviewAmount.AverageReviewScore),
