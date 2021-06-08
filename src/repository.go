@@ -169,7 +169,7 @@ func ListProducts(brand, category, search string, limit, offset int) []*model.Pr
 	}
 
 	options := options.Find()
-	options.SetSort(bson.D{{Key: "reviewscore", Value: -1}, {Key: "soldout", Value: 1}, {Key: "_id", Value: -1}})
+	options.SetSort(bson.D{{Key: "soldout", Value: 1}, {Key: "reviewscore", Value: -1}, {Key: "_id", Value: -1}})
 	options.SetLimit(int64(limit))
 	options.SetSkip(int64(offset))
 
