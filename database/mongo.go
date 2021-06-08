@@ -27,5 +27,5 @@ func InitDB(conf config.Configuration) {
 
 	utils.CheckErr(err)
 	utils.CheckErr(client.Ping(ctx, readpref.Primary()))
-	Db = client.Database("mealkit")
+	Db = client.Database("mealkit_new")
 }
